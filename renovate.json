@@ -7,7 +7,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/(^|/).+\\.tf$/",
+        "/(^|/).+\\.tf$/"
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>[a-z-]+?)(?: depName=(?<depName>.+?))? packageName=(?<packageName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s.+?[:=]\\s*[\"']?(?<currentValue>.+?)[\"']?\\s"
