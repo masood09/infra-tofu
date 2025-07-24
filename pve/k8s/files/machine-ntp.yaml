@@ -1,0 +1,4 @@
+machine:
+  time:
+    disabled: false
+    servers: ["time.cloudflare.com"]
