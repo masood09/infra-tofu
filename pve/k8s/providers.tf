@@ -4,6 +4,10 @@ terraform {
       source = "fluxcd/flux"
       version = "1.6.4"
     }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "2.38.0"
+    }
     proxmox = {
       source = "bpg/proxmox"
       version = "0.80.0"

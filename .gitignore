@@ -59,3 +59,4 @@ credentials.auto.tfvars
 
 kubeconfig
 talosconfig
+age-key.txt
