@@ -21,7 +21,10 @@ data "talos_client_configuration" "talosconfig" {
 }
 
 resource "talos_machine_configuration_apply" "controlplane" {
-  depends_on                  = [ proxmox_virtual_environment_vm.vm_cp_nodes ]
+  depends_on                  = [
+    proxmox_virtual_environment_vm.vm_cp_nodes
+  ]
+
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
   for_each                    = var.talos_node_data.controlplanes
@@ -43,7 +46,10 @@ resource "talos_machine_configuration_apply" "controlplane" {
 }
 
 resource "talos_machine_configuration_apply" "worker" {
-  depends_on                  = [ proxmox_virtual_environment_vm.vm_worker_nodes ]
+  depends_on                  = [
+    proxmox_virtual_environment_vm.vm_worker_nodes
+  ]
+
   client_configuration        = talos_machine_secrets.machine_secrets.client_configuration
   machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
   for_each                    = var.talos_node_data.workers
@@ -58,14 +64,20 @@ resource "talos_machine_configuration_apply" "worker" {
 }
 
 resource "talos_machine_bootstrap" "bootstrap" {
-  depends_on = [talos_machine_configuration_apply.controlplane]
+  depends_on = [
+    talos_machine_configuration_apply.controlplane
+  ]
 
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   node                 = [for k, v in var.talos_node_data.controlplanes : k][0]
 }
 
 data "talos_cluster_health" "health" {
-  depends_on           = [ talos_machine_configuration_apply.controlplane, talos_machine_configuration_apply.worker ]
+  depends_on           = [
+    talos_machine_configuration_apply.controlplane,
+    talos_machine_configuration_apply.worker
+  ]
+
   client_configuration = data.talos_client_configuration.talosconfig.client_configuration
   control_plane_nodes  = [for k, v in var.talos_node_data.controlplanes : k]
   worker_nodes         = [for k, v in var.talos_node_data.workers : k]
@@ -73,13 +85,20 @@ data "talos_cluster_health" "health" {
 }
 
 resource "talos_cluster_kubeconfig" "kubeconfig" {
-  depends_on           = [ talos_machine_bootstrap.bootstrap, data.talos_cluster_health.health ]
+  depends_on           = [
+    talos_machine_bootstrap.bootstrap,
+    data.talos_cluster_health.health
+  ]
+
   client_configuration = talos_machine_secrets.machine_secrets.client_configuration
   node                 = [for k, v in var.talos_node_data.controlplanes : k][0]
 }
 
 resource "local_file" "kubeconfig" {
-  depends_on = [ talos_cluster_kubeconfig.kubeconfig ]
+  depends_on = [
+    talos_cluster_kubeconfig.kubeconfig
+  ]
+
   content    = talos_cluster_kubeconfig.kubeconfig.kubeconfig_raw
   filename   = "${path.module}/kubeconfig"
 }

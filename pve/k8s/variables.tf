@@ -117,3 +117,20 @@ variable "github_repository" {
   type        = string
   default     = "infra-flux"
 }
+
+variable "git_sync_path" {
+  description = "The path within repository pointing to our cluster"
+  type        = string
+}
+
+variable "flux_version" {
+  type = string
+
+  # renovate: datasource=github-releases depName=flux2 packageName=fluxcd/flux2
+  default = "v2.6.3"
+}
+
+variable "flux_registry" {
+  type    = string
+  default = "ghcr.io/fluxcd"
+}

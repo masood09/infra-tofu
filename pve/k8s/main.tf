@@ -10,19 +10,12 @@ provider "proxmox" {
   }
 }
 
-provider "flux" {
+provider "helm" {
   kubernetes = {
     config_path = "${path.module}/kubeconfig"
-  }
-  git = {
-    url = "https://github.com/${var.github_org}/${var.github_repository}.git"
-    http = {
-      username = var.github_org
-      password = var.github_token
-    }
   }
 }
 
 provider "kubernetes" {
-  config_path    = "${path.module}/kubeconfig"
+  config_path = "${path.module}/kubeconfig"
 }

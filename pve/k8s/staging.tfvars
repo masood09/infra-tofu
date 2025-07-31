@@ -42,3 +42,5 @@ talos_node_data = {
     }
   }
 }
+
+git_sync_path = "clusters/homelab-staging"
