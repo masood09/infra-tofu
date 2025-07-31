@@ -127,7 +127,7 @@ variable "flux_version" {
   type = string
 
   # renovate: datasource=github-releases depName=flux2 packageName=fluxcd/flux2
-  default = "v2.6.3"
+  default = "v2.6.4"
 }
 
 variable "flux_registry" {
