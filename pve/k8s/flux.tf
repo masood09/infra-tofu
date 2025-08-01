@@ -117,6 +117,10 @@ resource "helm_release" "flux_instance" {
     {
       name  = "instance.sync.pullSecret"
       value = "github-auth"
+    },
+    {
+      name  = "serviceMonitor.create"
+      value = true
     }
   ]
 }

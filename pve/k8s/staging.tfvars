@@ -18,7 +18,7 @@ vm_worker_nodes = [
     node_name   = "k8s-staging-worker-01"
     cpu_cores   = 2
     cpu_type    = "x86-64-v2-AES"
-    memory      = 2048
+    memory      = 6144
     disk_size   = "10"
     mac_address = "bc:24:11:79:ed:49"
   }
