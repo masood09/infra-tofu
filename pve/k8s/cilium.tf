@@ -4,7 +4,7 @@ data "helm_template" "cilium" {
   repository   = "https://helm.cilium.io"
   chart        = "cilium"
   # renovate: datasource=helm depName=cilium registryUrl=https://helm.cilium.io
-  version      = "1.17.5"
+  version      = "1.18.0"
   kube_version = var.kubernetes_version
   set = [
     {
