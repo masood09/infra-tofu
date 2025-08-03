@@ -3,7 +3,7 @@ vm_cp_nodes = [
     vm_id       = 7111
     target_node = "pve-02"
     node_name   = "k8s-staging-cp-01"
-    cpu_cores   = 2
+    cpu_cores   = 6
     cpu_type    = "x86-64-v2-AES"
     memory      = 4096
     disk_size   = "10"
@@ -16,7 +16,7 @@ vm_worker_nodes = [
     vm_id       = 7112
     target_node = "pve-03"
     node_name   = "k8s-staging-worker-01"
-    cpu_cores   = 2
+    cpu_cores   = 6
     cpu_type    = "x86-64-v2-AES"
     memory      = 6144
     disk_size   = "10"
@@ -42,5 +42,3 @@ talos_node_data = {
     }
   }
 }
-
-git_sync_path = "clusters/homelab-staging"

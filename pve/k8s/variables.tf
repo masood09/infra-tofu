@@ -65,6 +65,18 @@ variable "talos_version" {
   }
 }
 
+# see https://github.com/siderolabs/kubelet/pkgs/container/kubelet
+# see https://www.talos.dev/v1.10/introduction/support-matrix/
+variable "kubernetes_version" {
+  type = string
+  # renovate: datasource=github-releases depName=kubelet packageName=siderolabs/kubelet
+  default = "1.33.2"
+  validation {
+    condition     = can(regex("^\\d+(\\.\\d+)+", var.kubernetes_version))
+    error_message = "Must be a version number."
+  }
+}
+
 variable "talos_schematic_id" {
   type    = string
   default = "dc7b152cb3ea99b821fcb7340ce7168313ce393d663740b791c36f6e95fc8586"
@@ -97,40 +109,4 @@ variable "talos_node_data" {
       hostname     = optional(string)
     }))
   })
-}
-
-variable "github_token" {
-  description = "GitHub token"
-  sensitive   = true
-  type        = string
-  default     = ""
-}
-
-variable "github_org" {
-  description = "GitHub organization"
-  type        = string
-  default     = "masood09"
-}
-
-variable "github_repository" {
-  description = "GitHub repository"
-  type        = string
-  default     = "infra-flux"
-}
-
-variable "git_sync_path" {
-  description = "The path within repository pointing to our cluster"
-  type        = string
-}
-
-variable "flux_version" {
-  type = string
-
-  # renovate: datasource=github-releases depName=flux2 packageName=fluxcd/flux2
-  default = "v2.6.4"
-}
-
-variable "flux_registry" {
-  type    = string
-  default = "ghcr.io/fluxcd"
 }
