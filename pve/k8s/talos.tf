@@ -38,28 +38,47 @@ resource "talos_machine_configuration_apply" "controlplane" {
   for_each                    = var.talos_node_data.controlplanes
   node                        = each.key
   config_patches = [
-    templatefile("${path.module}/files/machine-disk-network.yaml.tmpl", {
+    templatefile("${path.module}/files/talos/machine-disk-network.yaml.tmpl", {
       hostname     = each.value.hostname == null ? format("%s-cp-%s", var.talos_cluster_name, index(keys(var.talos_node_data.controlplanes), each.key)) : each.value.hostname
       install_disk = each.value.install_disk
     }),
-    file("${path.module}/files/machine-ntp.yaml"),
-    file("${path.module}/files/machine-kubePrism.yaml"),
-    file("${path.module}/files/machine-hostDNS.yaml"),
-    templatefile("${path.module}/files/machine-VIP.yaml.tmpl", {
+    file("${path.module}/files/talos/machine-ntp.yaml"),
+    file("${path.module}/files/talos/machine-kubePrism.yaml"),
+    file("${path.module}/files/talos/machine-hostDNS.yaml"),
+    templatefile("${path.module}/files/talos/machine-VIP.yaml.tmpl", {
       vip_ip = var.talos_cluster_vip_ip
     }),
-    file("${path.module}/files/cluster-scheduling.yaml"),
-    file("${path.module}/files/cluster-controllerManager.yaml"),
-    file("${path.module}/files/cluster-metrics-bind.yaml"),
-    file("${path.module}/files/cluster-etcd-metrics-url.yaml"),
-    file("${path.module}/files/cluster-discovery.yaml"),
-    file("${path.module}/files/cluster-network-proxy.yaml"),
+    file("${path.module}/files/talos/cluster-scheduling.yaml"),
+    file("${path.module}/files/talos/cluster-controllerManager.yaml"),
+    file("${path.module}/files/talos/cluster-metrics-bind.yaml"),
+    file("${path.module}/files/talos/cluster-etcd-metrics-url.yaml"),
+    file("${path.module}/files/talos/cluster-discovery.yaml"),
+    file("${path.module}/files/talos/cluster-network-proxy.yaml"),
     yamlencode({
       cluster = {
         inlineManifests = [
           {
-            name = "cilium",
+            name     = "cilium",
             contents = data.helm_template.cilium.manifest
+          },
+          {
+            name     = "namespace-flux-system",
+            contents = file("${path.module}/files/k8-manifests/namespace-flux-system.yaml")
+          },
+          {
+            name     = "secret-github-auth",
+            contents = templatefile("${path.module}/files/k8-manifests/secret-github-auth.yaml.tmpl", {
+              github_org   = var.github_org,
+              github_token = var.github_token
+            })
+          },
+          {
+            name     = "flux-operator",
+            contents = data.helm_template.flux-operator.manifest
+          },
+          {
+            name     = "flux-instance",
+            contents = data.helm_template.flux-instance.manifest
           }
         ]
       }
@@ -77,13 +96,13 @@ resource "talos_machine_configuration_apply" "worker" {
   for_each                    = var.talos_node_data.workers
   node                        = each.key
   config_patches = [
-    templatefile("${path.module}/files/machine-disk-network.yaml.tmpl", {
+    templatefile("${path.module}/files/talos/machine-disk-network.yaml.tmpl", {
       hostname     = each.value.hostname == null ? format("%s-worker-%s", var.talos_cluster_name, index(keys(var.talos_node_data.workers), each.key)) : each.value.hostname
       install_disk = each.value.install_disk
     }),
-    file("${path.module}/files/machine-ntp.yaml"),
-    file("${path.module}/files/machine-kubePrism.yaml"),
-    file("${path.module}/files/machine-hostDNS.yaml")
+    file("${path.module}/files/talos/machine-ntp.yaml"),
+    file("${path.module}/files/talos/machine-kubePrism.yaml"),
+    file("${path.module}/files/talos/machine-hostDNS.yaml")
   ]
 }
 
