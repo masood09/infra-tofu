@@ -14,9 +14,9 @@ module "vcn" {
   internet_gateway_route_rules = null
   local_peering_gateways       = null
   nat_gateway_route_rules      = null
-  vcn_name                     = "Free K8s VCN"
-  vcn_dns_label                = "freek8svcn"
-  vcn_cidrs                    = ["10.1.0.0/16"]
+  vcn_name                     = "K8s VCN"
+  vcn_dns_label                = "k8svcn"
+  vcn_cidrs                    = ["172.16.0.0/16"]
   create_internet_gateway      = true
   create_nat_gateway           = true
   create_service_gateway       = true
@@ -25,7 +25,7 @@ module "vcn" {
 resource "oci_core_security_list" "private_subnet_sl" {
   compartment_id = var.oci_compartment_ocid
   vcn_id         = module.vcn.vcn_id
-  display_name   = "Free K8s Private Subnet Security List"
+  display_name   = "K8s Private Subnet Security List"
 
   egress_security_rules {
     stateless        = false
@@ -36,7 +36,7 @@ resource "oci_core_security_list" "private_subnet_sl" {
 
   ingress_security_rules {
     stateless   = false
-    source      = "10.1.0.0/16"
+    source      = "172.16.0.0/16"
     source_type = "CIDR_BLOCK"
     protocol    = "all"
   }
@@ -45,7 +45,7 @@ resource "oci_core_security_list" "private_subnet_sl" {
 resource "oci_core_security_list" "public_subnet_sl" {
   compartment_id = var.oci_compartment_ocid
   vcn_id         = module.vcn.vcn_id
-  display_name   = "Free K8s Public Subnet Security List"
+  display_name   = "K8s Public Subnet Security List"
 
   egress_security_rules {
     stateless        = false
@@ -56,7 +56,7 @@ resource "oci_core_security_list" "public_subnet_sl" {
 
   ingress_security_rules {
     stateless   = false
-    source      = "10.1.0.0/16"
+    source      = "172.16.0.0/16"
     source_type = "CIDR_BLOCK"
     protocol    = "all"
   }
@@ -76,30 +76,30 @@ resource "oci_core_security_list" "public_subnet_sl" {
 resource "oci_core_subnet" "vcn_private_subnet" {
   compartment_id             = var.oci_compartment_ocid
   vcn_id                     = module.vcn.vcn_id
-  cidr_block                 = "10.1.1.0/24"
+  cidr_block                 = "172.16.1.0/24"
   route_table_id             = module.vcn.nat_route_id
   security_list_ids          = [
     oci_core_security_list.private_subnet_sl.id
   ]
-  display_name               = "Free K8s Private Subnet"
+  display_name               = "K8s Private Subnet"
   prohibit_public_ip_on_vnic = true
 }
 
 resource "oci_core_subnet" "vcn_public_subnet" {
   compartment_id    = var.oci_compartment_ocid
   vcn_id            = module.vcn.vcn_id
-  cidr_block        = "10.1.0.0/24"
+  cidr_block        = "172.16.0.0/24"
   route_table_id    = module.vcn.ig_route_id
   security_list_ids = [
     oci_core_security_list.public_subnet_sl.id
   ]
-  display_name      = "Free K8s Public Subnet"
+  display_name      = "K8s Public Subnet"
 }
 
 resource "oci_containerengine_cluster" "k8s_cluster" {
   compartment_id     = var.oci_compartment_ocid
   kubernetes_version = "v1.33.1"
-  name               = "Free K8s Cluster"
+  name               = "K8s Cluster"
   vcn_id             = module.vcn.vcn_id
 
   endpoint_config {
@@ -114,8 +114,8 @@ resource "oci_containerengine_cluster" "k8s_cluster" {
     }
 
     kubernetes_network_config {
-      pods_cidr     = "10.244.0.0/16"
-      services_cidr = "10.96.0.0/16"
+      pods_cidr     = "10.240.0.0/16"
+      services_cidr = "10.250.0.0/16"
     }
 
     service_lb_subnet_ids = [oci_core_subnet.vcn_public_subnet.id]
@@ -130,7 +130,7 @@ resource "oci_containerengine_node_pool" "k8s_node_pool" {
   cluster_id         = oci_containerengine_cluster.k8s_cluster.id
   compartment_id     = var.oci_compartment_ocid
   kubernetes_version = "v1.33.1"
-  name               = "free-k8s-node-pool"
+  name               = "k8s-node-pool"
   ssh_public_key     = var.ssh_public_key
   node_shape         = "VM.Standard.A1.Flex"
 
@@ -140,7 +140,7 @@ resource "oci_containerengine_node_pool" "k8s_node_pool" {
       subnet_id           = oci_core_subnet.vcn_private_subnet.id
     }
 
-    size = 2
+    size = 3
   }
 
   node_shape_config {
@@ -155,7 +155,7 @@ resource "oci_containerengine_node_pool" "k8s_node_pool" {
 
   initial_node_labels {
     key   = "name"
-    value = "free-k8s-cluster"
+    value = "k8s-cluster"
   }
 }
 
