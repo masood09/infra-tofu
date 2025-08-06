@@ -37,7 +37,7 @@ resource "helm_release" "flux-operator" {
   name             = "flux-operator"
   repository       = "oci://ghcr.io/controlplaneio-fluxcd/charts"
   chart            = "flux-operator"
-  version          = "0.26.0"
+  version          = "0.27.0"
 }
 
 resource "kubernetes_secret" "github_auth" {
