@@ -1,0 +1,15 @@
+{
+	"github_token ": "ENC[AES256_GCM,data:RnKpCRgMxVD5Fh/Fc1Cjp+aRVgqums6mvfJZUD1QRsfWSqPOBuvxA2IfUI9R5iNsO1lQn69nw88hDoRy36kuiE9EATrQYMFVp2bOvpE6gXGwW/vLedOy0s8hX+Aa83cb,iv:9tNGuyXI+wSdiyD5gcRgqyiEiLmLi6K4WJ83jObtNj0=,tag:BjoBjisii/5thBGeKTpm5w==,type:str]",
+	"sops": {
+		"age": [
+			{
+				"recipient": "age1s90xwvtqw9at892s8tyde9lp8vu3rs2lde7pwh7hayuc2sahmv6qmkwpff",
+				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFZnRoZ2dYaU1lck1BYWlo\nWThjbSswRm9TTzRVb2hCNnV1RkFUemQ2Um5JCkhhL1E2MUZ3WUFlQ3BMZm1pSUhp\nelRibHdxR1RpcVMzdEl2NEFvd1pYKzQKLS0tIDM4d00wZ0hxWTFqcjdaNjkvREhL\nZ1N2d0tjNTh5c1YrS2lhRnNwTjJ6OUEKr6wgaoF/lI1plyPtIG55BcKy8L7q33L5\nXIbiF5pyZUojPkYo5hqgBcolB+e6Gu4GyqTW4MpUF1TDdyS1mO97oA==\n-----END AGE ENCRYPTED FILE-----\n"
+			}
+		],
+		"lastmodified": "2025-08-06T18:02:31Z",
+		"mac": "ENC[AES256_GCM,data:DrbHYuewtksFQP93nssShROlrOc0XwtW8o7Ln8kFX6+1BOFmD5z5ZL772kXMG5g8hpoTdAdSbJTIEUsrMZkLqFRjZ/M/g9DDxvN8qvMYAxmzsTG8AuYDqklsTCX9C9fZ7buwOKe5awyHDqj03tNwdH8Hj3HobY4pXAh3rUeM5wY=,iv:lWE43kX6XYDEF/Uur+PdqcY3uxxbqqIP+Esqh0PdBCI=,tag:p5A8eM6qFSSZBXu0ppT/XQ==,type:str]",
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.10.2"
+	}
+}
