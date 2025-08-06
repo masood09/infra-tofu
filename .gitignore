@@ -59,5 +59,6 @@ credentials.auto.tfvars
 sensitive.auto.tfvars
 
 kubeconfig
+kubeconfig.yaml
 talosconfig
 age-key.txt

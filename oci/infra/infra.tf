@@ -159,6 +159,11 @@ resource "oci_containerengine_node_pool" "k8s_node_pool" {
   }
 }
 
-output "k8s-cluster-id" {
-  value = oci_containerengine_cluster.k8s_cluster.id
+data "oci_containerengine_cluster_kube_config" "k8s_cluster" {
+  cluster_id = oci_containerengine_cluster.k8s_cluster.id
+}
+
+resource "local_file" "k8s_cluster_kube_config" {
+  content  = data.oci_containerengine_cluster_kube_config.k8s_cluster.content
+  filename = "${path.module}/../k8s/secrets/kubeconfig.yaml"
 }
