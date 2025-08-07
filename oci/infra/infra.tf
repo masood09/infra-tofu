@@ -159,6 +159,37 @@ resource "oci_containerengine_node_pool" "k8s_node_pool" {
   }
 }
 
+resource "oci_bastion_bastion" "k8s_bastion" {
+  bastion_type                 = "STANDARD"
+  compartment_id               = var.oci_compartment_ocid
+  target_subnet_id             = oci_core_subnet.vcn_private_subnet.id
+  name                         = "K8SBastion"
+
+  client_cidr_block_allow_list = [
+    "0.0.0.0/0"
+  ]
+}
+
+resource "oci_bastion_session" "k8s_session" {
+  depends_on             = [
+    oci_containerengine_node_pool.k8s_node_pool
+  ]
+
+  bastion_id             = oci_bastion_bastion.k8s_bastion.id
+  display_name           = "tofu-bastion-session"
+  session_ttl_in_seconds = 3600
+
+  key_details {
+    public_key_content = var.ssh_public_key
+  }
+
+  target_resource_details {
+    session_type                       = "PORT_FORWARDING"
+    target_resource_port               = 6443
+    target_resource_private_ip_address = split(":", oci_containerengine_cluster.k8s_cluster.endpoints[0].private_endpoint)[0]
+  }
+}
+
 data "oci_containerengine_cluster_kube_config" "k8s_cluster" {
   cluster_id = oci_containerengine_cluster.k8s_cluster.id
 }
@@ -166,4 +197,8 @@ data "oci_containerengine_cluster_kube_config" "k8s_cluster" {
 resource "local_file" "k8s_cluster_kube_config" {
   content  = data.oci_containerengine_cluster_kube_config.k8s_cluster.content
   filename = "${path.module}/../k8s/secrets/kubeconfig.yaml"
+}
+
+output "ssh-port-forward-command" {
+  value = oci_bastion_session.k8s_session.ssh_metadata.command
 }
