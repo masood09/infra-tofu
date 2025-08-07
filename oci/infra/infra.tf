@@ -103,7 +103,7 @@ resource "oci_containerengine_cluster" "k8s_cluster" {
   vcn_id             = module.vcn.vcn_id
 
   endpoint_config {
-    is_public_ip_enabled = true
+    is_public_ip_enabled = false
     subnet_id            = oci_core_subnet.vcn_public_subnet.id
   }
 
