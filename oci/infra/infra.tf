@@ -14,8 +14,8 @@ module "vcn" {
   internet_gateway_route_rules = null
   local_peering_gateways       = null
   nat_gateway_route_rules      = null
-  vcn_name                     = "K8s VCN"
-  vcn_dns_label                = "k8svcn"
+  vcn_name                     = "OCI VCN"
+  vcn_dns_label                = "ocivcn"
   vcn_cidrs                    = ["172.16.0.0/16"]
   create_internet_gateway      = true
   create_nat_gateway           = true
@@ -25,7 +25,7 @@ module "vcn" {
 resource "oci_core_security_list" "private_subnet_sl" {
   compartment_id = var.oci_compartment_ocid
   vcn_id         = module.vcn.vcn_id
-  display_name   = "K8s Private Subnet Security List"
+  display_name   = "Private Subnet Security List"
 
   egress_security_rules {
     stateless        = false
@@ -45,7 +45,7 @@ resource "oci_core_security_list" "private_subnet_sl" {
 resource "oci_core_security_list" "public_subnet_sl" {
   compartment_id = var.oci_compartment_ocid
   vcn_id         = module.vcn.vcn_id
-  display_name   = "K8s Public Subnet Security List"
+  display_name   = "Public Subnet Security List"
 
   egress_security_rules {
     stateless        = false
@@ -92,7 +92,7 @@ resource "oci_core_subnet" "vcn_private_subnet" {
   security_list_ids          = [
     oci_core_security_list.private_subnet_sl.id
   ]
-  display_name               = "K8s Private Subnet"
+  display_name               = "Private Subnet"
   prohibit_public_ip_on_vnic = true
   dns_label                  = "privatesubnet"
 }
@@ -105,14 +105,14 @@ resource "oci_core_subnet" "vcn_public_subnet" {
   security_list_ids = [
     oci_core_security_list.public_subnet_sl.id
   ]
-  display_name      = "K8s Public Subnet"
+  display_name      = "Public Subnet"
   dns_label         = "publicsubnet"
 }
 
-resource "oci_containerengine_cluster" "k8s_cluster" {
+resource "oci_containerengine_cluster" "production_cluster" {
   compartment_id     = var.oci_compartment_ocid
   kubernetes_version = "v1.33.1"
-  name               = "K8s Cluster"
+  name               = "OCI Production Cluster"
   vcn_id             = module.vcn.vcn_id
 
   endpoint_config {
@@ -139,11 +139,11 @@ data "oci_identity_availability_domains" "ads" {
   compartment_id = var.oci_compartment_ocid
 }
 
-resource "oci_containerengine_node_pool" "k8s_node_pool" {
-  cluster_id         = oci_containerengine_cluster.k8s_cluster.id
+resource "oci_containerengine_node_pool" "production_node_pool" {
+  cluster_id         = oci_containerengine_cluster.production_cluster.id
   compartment_id     = var.oci_compartment_ocid
   kubernetes_version = "v1.33.1"
-  name               = "k8s-node-pool"
+  name               = "oci-production-node-pool"
   ssh_public_key     = var.ssh_public_key
   node_shape         = "VM.Standard.A1.Flex"
 
@@ -168,11 +168,11 @@ resource "oci_containerengine_node_pool" "k8s_node_pool" {
 
   initial_node_labels {
     key   = "name"
-    value = "k8s-cluster"
+    value = "oci-production-cluster"
   }
 }
 
-resource "oci_bastion_bastion" "k8s_bastion" {
+resource "oci_bastion_bastion" "bastion" {
   bastion_type                 = "STANDARD"
   compartment_id               = var.oci_compartment_ocid
   target_subnet_id             = oci_core_subnet.vcn_private_subnet.id
@@ -183,12 +183,12 @@ resource "oci_bastion_bastion" "k8s_bastion" {
   ]
 }
 
-resource "oci_bastion_session" "k8s_session" {
+resource "oci_bastion_session" "session" {
   depends_on             = [
-    oci_containerengine_node_pool.k8s_node_pool
+    oci_containerengine_node_pool.production_node_pool
   ]
 
-  bastion_id             = oci_bastion_bastion.k8s_bastion.id
+  bastion_id             = oci_bastion_bastion.bastion.id
   display_name           = "tofu-bastion-session"
   session_ttl_in_seconds = 3600
 
@@ -199,16 +199,16 @@ resource "oci_bastion_session" "k8s_session" {
   target_resource_details {
     session_type                       = "PORT_FORWARDING"
     target_resource_port               = 6443
-    target_resource_private_ip_address = split(":", oci_containerengine_cluster.k8s_cluster.endpoints[0].private_endpoint)[0]
+    target_resource_private_ip_address = split(":", oci_containerengine_cluster.production_cluster.endpoints[0].private_endpoint)[0]
   }
 }
 
-data "oci_containerengine_cluster_kube_config" "k8s_cluster" {
-  cluster_id = oci_containerengine_cluster.k8s_cluster.id
+data "oci_containerengine_cluster_kube_config" "production_cluster" {
+  cluster_id = oci_containerengine_cluster.production_cluster.id
 }
 
-resource "local_file" "k8s_cluster_kube_config" {
-  content  = data.oci_containerengine_cluster_kube_config.k8s_cluster.content
+resource "local_file" "production_cluster_kube_config" {
+  content  = data.oci_containerengine_cluster_kube_config.production_cluster.content
   filename = "${path.module}/../k8s/secrets/kubeconfig.yaml"
 }
 
@@ -219,10 +219,10 @@ data "oci_core_images" "vm_images" {
   shape = "VM.Standard.A1.Flex"
 }
 
-resource "oci_core_instance" "vm_instance" {
+resource "oci_core_instance" "mensah_instance" {
   availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
   compartment_id      = var.oci_compartment_ocid
-  display_name        = "vm-01"
+  display_name        = "mensah"
   shape               = "VM.Standard.A1.Flex"
 
   shape_config {
@@ -234,7 +234,7 @@ resource "oci_core_instance" "vm_instance" {
     subnet_id        = oci_core_subnet.vcn_public_subnet.id
     display_name     = "primaryvnic"
     assign_public_ip = true
-    hostname_label   = "vm-01"
+    hostname_label   = "mensah"
   }
 
   source_details {
@@ -248,5 +248,5 @@ resource "oci_core_instance" "vm_instance" {
 }
 
 output "ssh-port-forward-command" {
-  value = oci_bastion_session.k8s_session.ssh_metadata.command
+  value = oci_bastion_session.session.ssh_metadata.command
 }
