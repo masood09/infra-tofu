@@ -1,1 +1,1 @@
-git_sync_path = "clusters/oci"
+git_sync_path = "clusters/oci-production"
