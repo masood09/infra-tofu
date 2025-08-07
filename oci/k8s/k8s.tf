@@ -32,6 +32,10 @@ resource "helm_release" "cilium" {
 }
 
 resource "helm_release" "flux-operator" {
+  depends_on       = [
+    helm_release.cilium
+  ]
+
   namespace        = "flux-system"
   create_namespace = true
   name             = "flux-operator"
