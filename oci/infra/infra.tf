@@ -83,6 +83,7 @@ resource "oci_core_subnet" "vcn_private_subnet" {
   ]
   display_name               = "K8s Private Subnet"
   prohibit_public_ip_on_vnic = true
+  dns_label                  = "privatesubnet"
 }
 
 resource "oci_core_subnet" "vcn_public_subnet" {
@@ -94,6 +95,7 @@ resource "oci_core_subnet" "vcn_public_subnet" {
     oci_core_security_list.public_subnet_sl.id
   ]
   display_name      = "K8s Public Subnet"
+  dns_label         = "publicsubnet"
 }
 
 resource "oci_containerengine_cluster" "k8s_cluster" {
