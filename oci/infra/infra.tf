@@ -201,6 +201,41 @@ resource "local_file" "k8s_cluster_kube_config" {
   filename = "${path.module}/../k8s/secrets/kubeconfig.yaml"
 }
 
+data "oci_core_images" "vm_images" {
+  compartment_id = var.oci_compartment_ocid
+  operating_system = "Canonical Ubuntu"
+  operating_system_version = "24.04"
+  shape = "VM.Standard.A1.Flex"
+}
+
+resource "oci_core_instance" "vm_instance" {
+  availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
+  compartment_id      = var.oci_compartment_ocid
+  display_name        = "vm-01"
+  shape               = "VM.Standard.A1.Flex"
+
+  shape_config {
+    ocpus         = 1
+    memory_in_gbs = 6
+  }
+
+  create_vnic_details {
+    subnet_id        = oci_core_subnet.vcn_public_subnet.id
+    display_name     = "primaryvnic"
+    assign_public_ip = true
+    hostname_label   = "vm-01"
+  }
+
+  source_details {
+    source_type = "image"
+    source_id   = lookup(data.oci_core_images.vm_images.images[0], "id")
+  }
+
+  metadata = {
+    ssh_authorized_keys = var.ssh_public_key
+  }
+}
+
 output "ssh-port-forward-command" {
   value = oci_bastion_session.k8s_session.ssh_metadata.command
 }
