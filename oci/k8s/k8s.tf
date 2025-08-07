@@ -1,11 +1,11 @@
 provider "helm" {
   kubernetes = {
-    config_path = "${path.module}/secrets/kubeconfig.yaml"
+    config_path = "~/.kube/oci-production.yaml"
   }
 }
 
 provider "kubernetes" {
-  config_path = "${path.module}/secrets/kubeconfig.yaml"
+  config_path = "~/.kube/oci-production.yaml"
 }
 
 resource "helm_release" "cilium" {
