@@ -1,6 +1,6 @@
 variable "pve_conn_endpoint" {
   type    = string
-  default = "https://pve.mantannest.com/"
+  default = "https://pve-01.homelab.mantannest.com:8006/"
 }
 
 variable "pve_conn_api_token" {
