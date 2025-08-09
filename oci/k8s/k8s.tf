@@ -75,7 +75,7 @@ resource "helm_release" "flux-instance" {
   version          = "0.26.0"
 
   values           = [
-    file("${path.module}/../../pve/k8s/values/flux-operator-helm-values.yaml")
+    file("${path.module}/../../homelab/pve/k8s-staging/values/flux-operator-helm-values.yaml")
   ]
 
   set = [
