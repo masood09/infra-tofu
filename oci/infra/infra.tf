@@ -209,7 +209,7 @@ data "oci_containerengine_cluster_kube_config" "production_cluster" {
 
 resource "local_file" "production_cluster_kube_config" {
   content  = data.oci_containerengine_cluster_kube_config.production_cluster.content
-  filename = "${path.module}/../k8s/secrets/kubeconfig.yaml"
+  filename = "${path.module}/secrets/kubeconfig.yaml"
 }
 
 data "oci_core_images" "vm_images" {
