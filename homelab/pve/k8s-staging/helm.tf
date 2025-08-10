@@ -1,3 +1,13 @@
+data helm_template "metallb" {
+  namespace    = "metallb-system"
+  name         = "metallb"
+  repository   = "https://metallb.github.io/metallb"
+  chart        = "metallb"
+  # renovate: datasource=helm depName=metallb registryUrl=https://metallb.github.io/metallb
+  version      = "0.15.2"
+  kube_version = var.kubernetes_version
+}
+
 data "helm_template" "cilium" {
   namespace    = "kube-system"
   name         = "cilium"
