@@ -55,6 +55,7 @@ data "helm_template" "flux-operator" {
   name         = "flux-operator"
   repository   = "oci://ghcr.io/controlplaneio-fluxcd/charts"
   chart        = "flux-operator"
+  # renovate: datasource=docker depName=flux-operator registryUrl=ghcr.io/controlplaneio-fluxcd/charts
   version      = "0.26.0"
   kube_version = var.kubernetes_version
 }
@@ -64,6 +65,7 @@ data "helm_template" "flux-instance" {
   name         = "flux"
   repository   = "oci://ghcr.io/controlplaneio-fluxcd/charts"
   chart        = "flux-instance"
+  # renovate: datasource=docker depName=flux-instance registryUrl=ghcr.io/controlplaneio-fluxcd/charts
   version      = "0.26.0"
   kube_version = var.kubernetes_version
   values       = [
