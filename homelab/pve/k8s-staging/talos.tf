@@ -62,14 +62,6 @@ resource "talos_machine_configuration_apply" "controlplane" {
             contents = data.helm_template.cilium.manifest
           },
           {
-            name     = "namespace-metallb-system",
-            contents = file("${path.module}/files/k8-manifests/namespace-metallb-system.yaml")
-          },
-          {
-            name     = "metallb",
-            contents = data.helm_template.metallb.manifest
-          },
-          {
             name     = "namespace-flux-system",
             contents = file("${path.module}/files/k8-manifests/namespace-flux-system.yaml")
           },
