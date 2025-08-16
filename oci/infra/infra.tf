@@ -194,37 +194,6 @@ resource "oci_containerengine_node_pool" "production_node_pool" {
   }
 }
 
-# resource "oci_bastion_bastion" "bastion" {
-#   bastion_type                 = "STANDARD"
-#   compartment_id               = var.oci_compartment_ocid
-#   target_subnet_id             = oci_core_subnet.vcn_private_subnet.id
-#   name                         = "K8SBastion"
-
-#   client_cidr_block_allow_list = [
-#     "0.0.0.0/0"
-#   ]
-# }
-
-# resource "oci_bastion_session" "session" {
-#   depends_on             = [
-#     oci_containerengine_node_pool.production_node_pool
-#   ]
-
-#   bastion_id             = oci_bastion_bastion.bastion.id
-#   display_name           = "tofu-bastion-session"
-#   session_ttl_in_seconds = 3600
-
-#   key_details {
-#     public_key_content = var.ssh_public_key
-#   }
-
-#   target_resource_details {
-#     session_type                       = "PORT_FORWARDING"
-#     target_resource_port               = 6443
-#     target_resource_private_ip_address = split(":", oci_containerengine_cluster.production_cluster.endpoints[0].private_endpoint)[0]
-#   }
-# }
-
 data "oci_containerengine_cluster_kube_config" "production_cluster" {
   cluster_id = oci_containerengine_cluster.production_cluster.id
 }
@@ -268,7 +237,3 @@ resource "oci_core_instance" "mensah_instance" {
     ssh_authorized_keys = var.ssh_public_key
   }
 }
-
-# output "ssh-port-forward-command" {
-#   value = oci_bastion_session.session.ssh_metadata.command
-# }
