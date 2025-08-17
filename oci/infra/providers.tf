@@ -4,5 +4,9 @@ terraform {
       source = "oracle/oci"
       version = "7.14.0"
     }
+    sops = {
+      source = "carlpett/sops"
+      version = "1.2.1"
+    }
   }
 }
