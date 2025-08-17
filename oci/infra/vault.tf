@@ -17,11 +17,11 @@ resource "oci_kms_key" "oci_vault_key" {
   }
 }
 
-data "sops_file" "flux-discord-webhook" {
+data "sops_file" "flux_discord_webhook" {
   source_file = "${path.module}/secrets/flux-discord-webhook.enc.json"
 }
 
-resource "oci_vault_secret" "flux-discord-webhook" {
+resource "oci_vault_secret" "flux_discord_webhook" {
   compartment_id = var.oci_compartment_ocid
   key_id         = oci_kms_key.oci_vault_key.id
   secret_name    = "flux-discord-webhook"
@@ -29,15 +29,15 @@ resource "oci_vault_secret" "flux-discord-webhook" {
 
   secret_content {
     content_type = "BASE64"
-    content      = base64encode(data.sops_file.flux-discord-webhook.raw)
+    content      = base64encode(data.sops_file.flux_discord_webhook.raw)
   }
 }
 
-data "sops_file" "cloudflare-token" {
+data "sops_file" "cloudflare_token" {
   source_file = "${path.module}/secrets/cloudflare-token.enc.json"
 }
 
-resource "oci_vault_secret" "cloudflare-token" {
+resource "oci_vault_secret" "cloudflare_token" {
   compartment_id = var.oci_compartment_ocid
   key_id         = oci_kms_key.oci_vault_key.id
   secret_name    = "cloudflare-token"
@@ -45,15 +45,15 @@ resource "oci_vault_secret" "cloudflare-token" {
 
   secret_content {
     content_type = "BASE64"
-    content      = base64encode(data.sops_file.cloudflare-token.raw)
+    content      = base64encode(data.sops_file.cloudflare_token.raw)
   }
 }
 
-data "sops_file" "traefik-dashboard-auth" {
+data "sops_file" "traefik_dashboard_auth" {
   source_file = "${path.module}/secrets/traefik-dashboard-auth.enc.json"
 }
 
-resource "oci_vault_secret" "traefik-dashboard-auth" {
+resource "oci_vault_secret" "traefik_dashboard_auth" {
   compartment_id = var.oci_compartment_ocid
   key_id         = oci_kms_key.oci_vault_key.id
   secret_name    = "traefik-dashboard-auth"
@@ -61,6 +61,6 @@ resource "oci_vault_secret" "traefik-dashboard-auth" {
 
   secret_content {
     content_type = "BASE64"
-    content      = base64encode(data.sops_file.traefik-dashboard-auth.raw)
+    content      = base64encode(data.sops_file.traefik_dashboard_auth.raw)
   }
 }
