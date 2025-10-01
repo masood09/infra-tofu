@@ -6,7 +6,7 @@ vm_cp_nodes = [
     cpu_cores   = 6
     cpu_type    = "x86-64-v2-AES"
     memory      = 4096
-    disk_size   = "10"
+    disk_size   = "40"
     mac_address = "bc:24:11:7a:31:e4"
   }
 ]
@@ -19,7 +19,7 @@ vm_worker_nodes = [
     cpu_cores   = 6
     cpu_type    = "x86-64-v2-AES"
     memory      = 6144
-    disk_size   = "10"
+    disk_size   = "40"
     mac_address = "bc:24:11:79:ed:49"
   }
 ]
