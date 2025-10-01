@@ -58,7 +58,7 @@ variable "vm_worker_nodes" {
 variable "talos_version" {
   type = string
   # renovate: datasource=github-releases depName=talos packageName=siderolabs/talos
-  default = "1.11.1"
+  default = "1.11.2"
   validation {
     condition     = can(regex("^\\d+(\\.\\d+)+", var.talos_version))
     error_message = "Must be a version number."
