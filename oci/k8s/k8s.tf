@@ -72,7 +72,7 @@ resource "helm_release" "flux-instance" {
   name             = "flux"
   repository       = "oci://ghcr.io/controlplaneio-fluxcd/charts"
   chart            = "flux-instance"
-  version          = "0.30.0"
+  version          = "0.31.0"
 
   values           = [
     file("${path.module}/../../homelab/pve/k8s-staging/values/flux-operator-helm-values.yaml")
