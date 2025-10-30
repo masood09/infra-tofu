@@ -28,6 +28,11 @@ variable "oci_region" {
   description = "An OCI region. See Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm)"
 }
 
+
+variable "oci_object_storage_namespace" {
+  type = string
+}
+
 variable "ssh_public_key" {
   type        = string
   description = "The SSH public key to use for connecting to the worker nodes"
