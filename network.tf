@@ -67,39 +67,6 @@ resource "oci_core_security_list" "public_subnet_sl" {
   }
 
   ingress_security_rules {
-    protocol    = "6"
-    source      = "0.0.0.0/0"
-    source_type = "CIDR_BLOCK"
-    stateless   = false
-    tcp_options {
-      max = 3478
-      min = 3478
-    }
-  }
-
-  ingress_security_rules {
-    protocol    = "6"
-    source      = "0.0.0.0/0"
-    source_type = "CIDR_BLOCK"
-    stateless   = false
-    tcp_options {
-      max = 10000
-      min = 10000
-    }
-  }
-
-  ingress_security_rules {
-    protocol    = "6"
-    source      = "0.0.0.0/0"
-    source_type = "CIDR_BLOCK"
-    stateless   = false
-    tcp_options {
-      max = 33080
-      min = 33080
-    }
-  }
-
-  ingress_security_rules {
     protocol    = "17"
     source      = "0.0.0.0/0"
     source_type = "CIDR_BLOCK"
@@ -107,39 +74,6 @@ resource "oci_core_security_list" "public_subnet_sl" {
     udp_options {
       min = 3478
       max = 3478
-    }
-  }
-
-  ingress_security_rules {
-    protocol    = "17"
-    source      = "0.0.0.0/0"
-    source_type = "CIDR_BLOCK"
-    stateless   = false
-    udp_options {
-      min = 5349
-      max = 5349
-    }
-  }
-
-  ingress_security_rules {
-    protocol    = "17"
-    source      = "0.0.0.0/0"
-    source_type = "CIDR_BLOCK"
-    stateless   = false
-    udp_options {
-      min = 33080
-      max = 33080
-    }
-  }
-
-  ingress_security_rules {
-    protocol    = "17"
-    source      = "0.0.0.0/0"
-    source_type = "CIDR_BLOCK"
-    stateless   = false
-    udp_options {
-      min = 40000
-      max = 40050
     }
   }
 }
