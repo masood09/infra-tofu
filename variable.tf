@@ -28,7 +28,6 @@ variable "oci_region" {
   description = "An OCI region. See Regions and Availability Domains (https://docs.oracle.com/iaas/Content/General/Concepts/regions.htm)"
 }
 
-
 variable "oci_object_storage_namespace" {
   type = string
 }
@@ -37,3 +36,16 @@ variable "ssh_public_key" {
   type        = string
   description = "The SSH public key to use for connecting to the worker nodes"
 }
+
+variable "cloudflare_api_token" {
+  description = "CloudFlare API Token"
+  sensitive   = true
+  type        = string
+}
+
+variable "cloudflare_zone_id" {
+  description = "CloudFlare Zone ID"
+  sensitive   = true
+  type        = string
+}
+

@@ -8,6 +8,10 @@ terraform {
       source = "carlpett/sops"
       version = "1.3.0"
     }
+    cloudflare = {
+      source = "cloudflare/cloudflare"
+      version = "5.8.4"
+    }
   }
 }
 
@@ -17,4 +21,8 @@ provider "oci" {
   user_ocid        = var.oci_user_ocid
   fingerprint      = var.oci_fingerprint
   private_key_path = var.oci_private_key_path
+}
+
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
 }
