@@ -16,6 +16,15 @@ resource "cloudflare_dns_record" "vpn-server_oci" {
   proxied = false
 }
 
+resource "cloudflare_dns_record" "ldap-server_oci" {
+  zone_id = var.cloudflare_zone_id
+  name    = "ldap-server.oci.mantannest.com"
+  content = oci_core_instance.ldap-server_instance.public_ip
+  type    = "A"
+  ttl     = 1
+  proxied = false
+}
+
 resource "cloudflare_dns_record" "auth_mantannest_com" {
   zone_id = var.cloudflare_zone_id
   name    = "auth.mantannest.com"
