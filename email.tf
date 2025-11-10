@@ -15,6 +15,11 @@ resource "oci_email_sender" "passwords" {
   email_address = "passwords@mantannest.com"
 }
 
+resource "oci_email_sender" "photos" {
+  compartment_id = var.oci_compartment_ocid
+  email_address = "photos@mantannest.com"
+}
+
 resource "oci_email_sender" "auth" {
   compartment_id = var.oci_compartment_ocid
   email_address = "auth@mantannest.com"
