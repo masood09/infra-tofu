@@ -29,7 +29,8 @@ resource "oci_core_instance" "oci-auth-server_instance" {
 
   source_details {
     source_type = "image"
-    source_id   = lookup(data.oci_core_images.vm_images.images[0], "id")
+    # source_id   = lookup(data.oci_core_images.vm_images.images[0], "id")
+    source_id = "ocid1.image.oc1.ca-toronto-1.aaaaaaaapdi7nd6nmef5o26mqzcvpyhsygucqn6zrxdvkpy2w34g3culh4vq"
   }
 
   metadata = {
@@ -57,7 +58,8 @@ resource "oci_core_instance" "oci-vpn-server_instance" {
 
   source_details {
     source_type = "image"
-    source_id   = lookup(data.oci_core_images.vm_images.images[0], "id")
+    # source_id   = lookup(data.oci_core_images.vm_images.images[0], "id")
+    source_id = "ocid1.image.oc1.ca-toronto-1.aaaaaaaapdi7nd6nmef5o26mqzcvpyhsygucqn6zrxdvkpy2w34g3culh4vq"
   }
 
   metadata = {
