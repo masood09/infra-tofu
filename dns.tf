@@ -16,6 +16,15 @@ resource "cloudflare_dns_record" "vpn-server_oci" {
   proxied = false
 }
 
+resource "cloudflare_dns_record" "accesscontrolsystem_oci" {
+  zone_id = var.cloudflare_zone_id
+  name    = "accesscontrolsystem.oci.mantannest.com"
+  content = oci_core_instance.accesscontrolsystem_instance.public_ip
+  type    = "A"
+  ttl     = 1
+  proxied = false
+}
+
 resource "cloudflare_dns_record" "watchfulsystem_oci" {
   zone_id = var.cloudflare_zone_id
   name    = "watchfulsystem.oci.mantannest.com"
