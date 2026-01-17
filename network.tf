@@ -67,6 +67,28 @@ resource "oci_core_security_list" "public_subnet_sl" {
   }
 
   ingress_security_rules {
+    stateless   = false
+    source      = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    protocol    = "6"
+    tcp_options {
+      min = 2222
+      max = 2222
+    }
+  }
+
+  ingress_security_rules {
+    stateless   = false
+    source      = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    protocol    = "6"
+    tcp_options {
+      min = 22222
+      max = 22222
+    }
+  }
+
+  ingress_security_rules {
     protocol    = "17"
     source      = "0.0.0.0/0"
     source_type = "CIDR_BLOCK"
