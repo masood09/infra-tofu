@@ -49,7 +49,7 @@ resource "cloudflare_dns_record" "headscale_mantannest_com" {
   content = cloudflare_dns_record.vpn-server_oci.name
   type    = "CNAME"
   ttl     = 1
-  proxied = true
+  proxied = false
 }
 
 resource "cloudflare_dns_record" "uptime_mantannest_com" {
@@ -58,7 +58,7 @@ resource "cloudflare_dns_record" "uptime_mantannest_com" {
   content = cloudflare_dns_record.watchfulsystem_oci.name
   type    = "CNAME"
   ttl     = 1
-  proxied = true
+  proxied = false
 }
 
 resource "cloudflare_dns_record" "oci_email_dkim" {
