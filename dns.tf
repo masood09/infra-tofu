@@ -1,12 +1,3 @@
-resource "cloudflare_dns_record" "vpn-server_oci" {
-  zone_id = var.cloudflare_zone_id
-  name    = "vpn-server.oci.mantannest.com"
-  content = oci_core_instance.oci-vpn-server_instance.public_ip
-  type    = "A"
-  ttl     = 1
-  proxied = false
-}
-
 resource "cloudflare_dns_record" "accesscontrolsystem_oci" {
   zone_id = var.cloudflare_zone_id
   name    = "accesscontrolsystem.oci.mantannest.com"
@@ -46,7 +37,7 @@ resource "cloudflare_dns_record" "auth_mantannest_com" {
 resource "cloudflare_dns_record" "headscale_mantannest_com" {
   zone_id = var.cloudflare_zone_id
   name    = "headscale.mantannest.com"
-  content = cloudflare_dns_record.vpn-server_oci.name
+  content = cloudflare_dns_record.meshcontrol_oci.name
   type    = "CNAME"
   ttl     = 1
   proxied = false
