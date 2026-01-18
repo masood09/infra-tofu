@@ -10,8 +10,8 @@ resource "oci_objectstorage_bucket" "oci-restic-vpn-server" {
   namespace      = var.oci_object_storage_namespace
 }
 
-resource "oci_objectstorage_bucket" "oci-restic-ldap-server" {
+resource "oci_objectstorage_bucket" "backups" {
   compartment_id = var.oci_compartment_ocid
-  name           = "oci-restic-ldap-server"
+  name           = "backups"
   namespace      = var.oci_object_storage_namespace
 }
