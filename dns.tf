@@ -7,6 +7,15 @@ resource "cloudflare_dns_record" "accesscontrolsystem_oci" {
   proxied = false
 }
 
+resource "cloudflare_dns_record" "boot_accesscontrolsystem_oci" {
+  zone_id = var.cloudflare_zone_id
+  name    = "boot.accesscontrolsystem.oci.mantannest.com"
+  content = cloudflare_dns_record.accesscontrolsystem_oci.name
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+
 resource "cloudflare_dns_record" "meshcontrol_oci" {
   zone_id = var.cloudflare_zone_id
   name    = "meshcontrol.oci.mantannest.com"
@@ -16,11 +25,29 @@ resource "cloudflare_dns_record" "meshcontrol_oci" {
   proxied = false
 }
 
+resource "cloudflare_dns_record" "boot_meshcontrol_oci" {
+  zone_id = var.cloudflare_zone_id
+  name    = "boot.meshcontrol.oci.mantannest.com"
+  content = cloudflare_dns_record.meshcontrol_oci.name
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+
 resource "cloudflare_dns_record" "watchfulsystem_oci" {
   zone_id = var.cloudflare_zone_id
   name    = "watchfulsystem.oci.mantannest.com"
   content = oci_core_instance.watchfulsystem_instance.public_ip
   type    = "A"
+  ttl     = 1
+  proxied = false
+}
+
+resource "cloudflare_dns_record" "boot_watchfulsystem_oci" {
+  zone_id = var.cloudflare_zone_id
+  name    = "boot.watchfulsystem.oci.mantannest.com"
+  content = cloudflare_dns_record.watchfulsystem_oci.name
+  type    = "CNAME"
   ttl     = 1
   proxied = false
 }
