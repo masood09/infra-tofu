@@ -15,9 +15,9 @@ resource "oci_email_sender" "auth" {
   email_address = "auth@mantannest.com"
 }
 
-resource "oci_email_sender" "drive" {
+resource "oci_email_sender" "cloud" {
   compartment_id = var.oci_compartment_ocid
-  email_address = "drive@mantannest.com"
+  email_address = "cloud@mantannest.com"
 }
 
 resource "oci_email_sender" "passwords" {
