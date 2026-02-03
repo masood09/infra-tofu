@@ -3,7 +3,7 @@ keys:
     age1s90xwvtqw9at892s8tyde9lp8vu3rs2lde7pwh7hayuc2sahmv6qmkwpff
 
 creation_rules:
-  - path_regex: .*\.tfvars$
+  - path_regex: .*\.(auto\.)?tfvars(\.enc)?$
     key_groups:
       - age:
           - *murderbot
