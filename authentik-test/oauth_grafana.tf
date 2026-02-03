@@ -28,12 +28,12 @@ resource "authentik_application" "grafana" {
 
 resource "authentik_policy_binding" "grafana-homelab-admin-access" {
   target = authentik_application.grafana.uuid
-  group  = authentik_group.homelab-admins.id
+  group  = authentik_group.groups["homelab-admins"].id
   order  = 1
 }
 
 resource "authentik_policy_binding" "grafana-parents-access" {
   target = authentik_application.grafana.uuid
-  group  = authentik_group.parents.id
+  group  = authentik_group.groups["parents"].id
   order  = 2
 }

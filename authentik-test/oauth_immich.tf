@@ -35,12 +35,12 @@ resource "authentik_application" "immich" {
 
 resource "authentik_policy_binding" "immich-parents-access" {
   target = authentik_application.immich.uuid
-  group  = authentik_group.parents.id
+  group  = authentik_group.groups["parents"].id
   order  = 1
 }
 
 resource "authentik_policy_binding" "immich-kids-access" {
   target = authentik_application.immich.uuid
-  group  = authentik_group.kids.id
+  group  = authentik_group.groups["kids"].id
   order  = 2
 }
