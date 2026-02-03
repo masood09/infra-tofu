@@ -1,11 +1,17 @@
----
+keys:
+  - &murderbot
+    age1s90xwvtqw9at892s8tyde9lp8vu3rs2lde7pwh7hayuc2sahmv6qmkwpff
+
 creation_rules:
-  - path_regex: /*.tfvars
-    age: age1s90xwvtqw9at892s8tyde9lp8vu3rs2lde7pwh7hayuc2sahmv6qmkwpff
-    format: ini
-    input_type: ini
+  - path_regex: .*\.tfvars$
+    key_groups:
+      - age:
+          - *murderbot
+
   - path_regex: ./.*/*.json
-    age: age1s90xwvtqw9at892s8tyde9lp8vu3rs2lde7pwh7hayuc2sahmv6qmkwpff
+    key_groups:
+      - age:
+          - *murderbot
 
 stores:
   yaml:
