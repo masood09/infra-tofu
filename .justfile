@@ -8,7 +8,7 @@ INPUT_TYPE := "binary"
 OUTPUT_TYPE := "binary"
 
 OCI_DIR := "oci"
-AK_TEST_DIR := "authentik-test"
+AK_TEST_DIR := "authentik/envs/test"
 
 OCI_PLAIN := OCI_DIR + "/sensitive.auto.tfvars"
 OCI_ENC   := OCI_DIR + "/sensitive.auto.tfvars.enc"

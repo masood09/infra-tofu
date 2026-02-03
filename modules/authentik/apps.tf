@@ -1,5 +1,5 @@
 locals {
-  apps = jsondecode(nonsensitive(data.sops_file.apps.raw)).apps
+  apps = var.apps_obj
 
   access_bindings = merge([
     for app_key, app in local.apps : {

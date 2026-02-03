@@ -1,6 +1,6 @@
 locals {
   # Decrypt + parse (this removes sensitivity for evaluation purposes)
-  users_obj = jsondecode(nonsensitive(data.sops_file.users.raw)).users
+  users_obj = var.users_obj
 
   # Non-sensitive IDs (u1/u2/...)
   user_ids = toset(keys(local.users_obj))
