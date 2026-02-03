@@ -18,3 +18,7 @@ provider "authentik" {
 data "sops_file" "users" {
   source_file = "${path.module}/secrets/users.sops.json"
 }
+
+data "sops_file" "apps" {
+  source_file = "${path.module}/secrets/apps.sops.json"
+}
