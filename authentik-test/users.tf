@@ -4,6 +4,20 @@ locals {
 
   # Non-sensitive IDs (u1/u2/...)
   user_ids = toset(keys(local.users_obj))
+
+  # All groups referenced by any user
+  referenced_group_keys = toset(flatten([
+    for _, u in local.users_obj : try(u.groups, [])
+  ]))
+
+  # Build: group_key => [user_key, user_key, ...]
+  group_members_user_keys = {
+    for g in local.referenced_group_keys :
+    g => [
+      for user_key, u in local.users_obj : user_key
+      if contains(try(u.groups, []), g)
+    ]
+  }
 }
 
 resource "authentik_user" "users" {
@@ -14,39 +28,16 @@ resource "authentik_user" "users" {
   name     = local.users_obj[each.key].name
 }
 
-resource "authentik_group" "authentik_admins" {
-  name         = "authentik Admins"
-  users        = [authentik_user.users["u1"].id]
-  is_superuser = true
-}
+resource "authentik_group" "groups" {
+  for_each = local.referenced_group_keys
 
-resource "authentik_group" "guests" {
-  name         = "guests"
-  users        = []
-}
+  name = each.key
 
-resource "authentik_group" "guests-trusted" {
-  name         = "guests-trusted"
-  users        = []
-}
-
-resource "authentik_group" "homelab-admins" {
-  name         = "homelab-admins"
-  users        = [authentik_user.users["u2"].id]
-}
-
-resource "authentik_group" "kids" {
-  name         = "kids"
-  users        = [
-    authentik_user.users["u3"].id,
-    authentik_user.users["u5"].id
+  users = [
+    for user_key in local.group_members_user_keys[each.key] :
+    authentik_user.users[user_key].id
   ]
-}
 
-resource "authentik_group" "parents" {
-  name         = "parents"
-  users        = [
-    authentik_user.users["u2"].id,
-    authentik_user.users["u4"].id
-  ]
+  # Only set superuser for the admin group
+  is_superuser = each.key == "authentik-admins"
 }
