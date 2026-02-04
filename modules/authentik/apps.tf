@@ -30,6 +30,9 @@ resource "authentik_provider_oauth2" "apps" {
   refresh_token_threshold = "hours=1"
   signing_key             = data.authentik_certificate_key_pair.generated.id
 
+  # Optional Subject mode.
+  sub_mode = try(each.value.provider.sub_mode, "hashed_user_id")
+
   # Optional logout settings
   logout_method = try(each.value.provider.logout_method, null)
   logout_uri    = try(each.value.provider.logout_uri, null)
