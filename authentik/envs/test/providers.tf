@@ -40,6 +40,8 @@ locals {
         client_secret        = app.provider.client_secret
         allowed_redirect_uris = app.provider.allowed_redirect_uris
 
+        sub_mode = try(app.provider.sub_mode, "hashed_user_id")
+
         logout_method = try(app.provider.logout_method, null)
         logout_uri    = try(app.provider.logout_uri, null)
       }
