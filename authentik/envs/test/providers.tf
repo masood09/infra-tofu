@@ -36,11 +36,13 @@ locals {
 
       provider = {
         name                 = app.provider.name
+        client_type          = try(app.provider.client_type, "confidential")
         client_id            = app.provider.client_id
-        client_secret        = app.provider.client_secret
+        client_secret        = try(app.provider.client_secret, null)
         allowed_redirect_uris = app.provider.allowed_redirect_uris
 
         sub_mode = try(app.provider.sub_mode, "hashed_user_id")
+        extra_managed_scopes = try(app.provider.extra_managed_scopes, [])
 
         logout_method = try(app.provider.logout_method, null)
         logout_uri    = try(app.provider.logout_uri, null)
