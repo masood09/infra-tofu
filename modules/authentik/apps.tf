@@ -19,13 +19,14 @@ resource "authentik_provider_oauth2" "apps" {
   name               = each.value.provider.name
   authorization_flow = data.authentik_flow.default-authorization-flow.id
 
+  client_type   = try(each.value.provider.client_type, "confidential")
   client_id     = each.value.provider.client_id
-  client_secret = each.value.provider.client_secret
+  client_secret = try(each.value.provider.client_secret, null)
 
   allowed_redirect_uris = each.value.provider.allowed_redirect_uris
 
   invalidation_flow       = data.authentik_flow.default-invalidation-flow.id
-  property_mappings       = data.authentik_property_mapping_provider_scope.default-scope.ids
+  property_mappings       = data.authentik_property_mapping_provider_scope.scopes[each.key].ids
   access_token_validity   = "minutes=5"
   refresh_token_threshold = "hours=1"
   signing_key             = data.authentik_certificate_key_pair.generated.id
