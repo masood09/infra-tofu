@@ -41,6 +41,11 @@ locals {
         client_secret        = try(app.provider.client_secret, null)
         allowed_redirect_uris = app.provider.allowed_redirect_uris
 
+        access_code_validity    = try(app.provider.access_code_validity, "minutes=1")
+        access_token_validity   = try(app.provider.access_token_validity, "minutes=10")
+        refresh_token_threshold = try(app.provider.refresh_token_threshold, "seconds=0")
+        refresh_token_validity  = try(app.provider.refresh_token_validity, "days=30")
+
         sub_mode = try(app.provider.sub_mode, "hashed_user_id")
         extra_managed_scopes = try(app.provider.extra_managed_scopes, [])
 
