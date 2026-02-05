@@ -27,8 +27,12 @@ resource "authentik_provider_oauth2" "apps" {
 
   invalidation_flow       = data.authentik_flow.default-invalidation-flow.id
   property_mappings       = data.authentik_property_mapping_provider_scope.scopes[each.key].ids
-  access_token_validity   = "minutes=5"
-  refresh_token_threshold = "hours=1"
+
+  access_code_validity    = try(each.value.provider.access_code_validity, "minutes=1")
+  access_token_validity   = try(each.value.provider.access_token_validity, "minutes=10")
+  refresh_token_threshold = try(each.value.provider.refresh_token_threshold, "seconds=0")
+  refresh_token_validity  = try(each.value.provider.refresh_token_validity, "days=30")
+
   signing_key             = data.authentik_certificate_key_pair.generated.id
 
   # Optional Subject mode.
