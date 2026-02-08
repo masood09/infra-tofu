@@ -16,6 +16,24 @@ resource "cloudflare_dns_record" "boot_accesscontrolsystem_oci" {
   proxied = false
 }
 
+resource "cloudflare_dns_record" "commrelay_oci" {
+  zone_id = var.cloudflare_zone_id
+  name    = "commrelay.oci.mantannest.com"
+  content = oci_core_instance.commrelay_instance.public_ip
+  type    = "A"
+  ttl     = 1
+  proxied = false
+}
+
+resource "cloudflare_dns_record" "boot_commrelay_oci" {
+  zone_id = var.cloudflare_zone_id
+  name    = "boot.commrelay.oci.mantannest.com"
+  content = cloudflare_dns_record.commrelay_oci.name
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+
 resource "cloudflare_dns_record" "meshcontrol_oci" {
   zone_id = var.cloudflare_zone_id
   name    = "meshcontrol.oci.mantannest.com"
