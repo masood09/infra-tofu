@@ -99,7 +99,7 @@ resource "cloudflare_dns_record" "uptime_mantannest_com" {
 
 resource "cloudflare_dns_record" "oci_email_dkim" {
   zone_id = var.cloudflare_zone_id
-  name    = oci_email_dkim.mantannest_com.dns_subdomain_name
+  name    = "${oci_email_dkim.mantannest_com.name}._domainkey"
   content = oci_email_dkim.mantannest_com.cname_record_value
   type    = "CNAME"
   ttl     = 1
