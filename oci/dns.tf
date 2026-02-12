@@ -70,24 +70,6 @@ resource "cloudflare_dns_record" "boot_watchfulsystem_oci" {
   proxied = false
 }
 
-resource "cloudflare_dns_record" "mantannest_com" {
-  zone_id = var.cloudflare_zone_id
-  name    = "mantannest.com"
-  content = oci_core_instance.commrelay_instance.public_ip
-  type    = "A"
-  ttl     = 1
-  proxied = false
-}
-
-resource "cloudflare_dns_record" "www_mantannest_com" {
-  zone_id = var.cloudflare_zone_id
-  name    = "www.mantannest.com"
-  content = cloudflare_dns_record.mantannest_com.name
-  type    = "CNAME"
-  ttl     = 1
-  proxied = false
-}
-
 resource "cloudflare_dns_record" "auth_mantannest_com" {
   zone_id = var.cloudflare_zone_id
   name    = "auth.mantannest.com"
@@ -97,19 +79,37 @@ resource "cloudflare_dns_record" "auth_mantannest_com" {
   proxied = false
 }
 
-resource "cloudflare_dns_record" "headscale_mantannest_com" {
+resource "cloudflare_dns_record" "chat_mantannest_com" {
   zone_id = var.cloudflare_zone_id
-  name    = "headscale.mantannest.com"
-  content = cloudflare_dns_record.meshcontrol_oci.name
+  name    = "chat.mantannest.com"
+  content = cloudflare_dns_record.commrelay_oci.name
   type    = "CNAME"
   ttl     = 1
   proxied = false
 }
 
-resource "cloudflare_dns_record" "matrix_mantannest_com" {
+resource "cloudflare_dns_record" "mas_chat_mantannest_com" {
   zone_id = var.cloudflare_zone_id
-  name    = "matrix.mantannest.com"
-  content = cloudflare_dns_record.mantannest_com.name
+  name    = "mas.chat.mantannest.com"
+  content = cloudflare_dns_record.commrelay_oci.name
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+
+resource "cloudflare_dns_record" "rtc_chat_mantannest_com" {
+  zone_id = var.cloudflare_zone_id
+  name    = "rtc.chat.mantannest.com"
+  content = cloudflare_dns_record.commrelay_oci.name
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+
+resource "cloudflare_dns_record" "headscale_mantannest_com" {
+  zone_id = var.cloudflare_zone_id
+  name    = "headscale.mantannest.com"
+  content = cloudflare_dns_record.meshcontrol_oci.name
   type    = "CNAME"
   ttl     = 1
   proxied = false
