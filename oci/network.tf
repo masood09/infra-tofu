@@ -98,6 +98,30 @@ resource "oci_core_security_list" "public_subnet_sl" {
       max = 3478
     }
   }
+
+  # LiveKit TCP fallback (WebRTC over TCP)
+  ingress_security_rules {
+    stateless   = false
+    source      = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    protocol    = "6" # TCP
+    tcp_options {
+      min = 7881
+      max = 7881
+    }
+  }
+
+  # LiveKit WebRTC media ports (UDP range)
+  ingress_security_rules {
+    stateless   = false
+    source      = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    protocol    = "17" # UDP
+    udp_options {
+      min = 50100
+      max = 50200
+    }
+  }
 }
 
 resource "oci_core_subnet" "vcn_public_subnet" {
