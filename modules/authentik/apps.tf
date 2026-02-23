@@ -13,6 +13,19 @@ locals {
   ]...)
 }
 
+resource "authentik_property_mapping_provider_scope" "verified_email_scope" {
+  name        = "Verified Email Scope"
+  scope_name  = "email"
+  description = "Email address"
+
+  expression = <<-EOT
+    return {
+        "email": request.user.email,
+        "email_verified": True
+    }
+  EOT
+}
+
 resource "authentik_provider_oauth2" "apps" {
   for_each = local.apps
 
@@ -26,7 +39,11 @@ resource "authentik_provider_oauth2" "apps" {
   allowed_redirect_uris = each.value.provider.allowed_redirect_uris
 
   invalidation_flow       = data.authentik_flow.default-invalidation-flow.id
-  property_mappings       = data.authentik_property_mapping_provider_scope.scopes[each.key].ids
+
+  property_mappings = distinct(concat(
+    data.authentik_property_mapping_provider_scope.scopes[each.key].ids,
+    [authentik_property_mapping_provider_scope.verified_email_scope.id],
+  ))
 
   access_code_validity    = try(each.value.provider.access_code_validity, "minutes=1")
   access_token_validity   = try(each.value.provider.access_token_validity, "minutes=10")
