@@ -124,6 +124,24 @@ resource "cloudflare_dns_record" "uptime_mantannest_com" {
   proxied = false
 }
 
+resource "cloudflare_dns_record" "passwords_mantannest_com" {
+  zone_id = var.cloudflare_zone_id
+  name    = "passwords.mantannest.com"
+  content = cloudflare_dns_record.commrelay_oci.name
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+
+resource "cloudflare_dns_record" "keep_mantannest_com" {
+  zone_id = var.cloudflare_zone_id
+  name    = "keep.mantannest.com"
+  content = cloudflare_dns_record.commrelay_oci.name
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+
 resource "cloudflare_dns_record" "oci_email_dkim" {
   zone_id = var.cloudflare_zone_id
   name    = "${oci_email_dkim.mantannest_com.name}._domainkey"
