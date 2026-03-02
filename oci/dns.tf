@@ -106,6 +106,15 @@ resource "cloudflare_dns_record" "rtc_chat_mantannest_com" {
   proxied = false
 }
 
+resource "cloudflare_dns_record" "nightscout_mantannest_com" {
+  zone_id = var.cloudflare_zone_id
+  name    = "nightscout.mantannest.com"
+  content = cloudflare_dns_record.commrelay_oci.name
+  type    = "CNAME"
+  ttl     = 1
+  proxied = false
+}
+
 resource "cloudflare_dns_record" "headscale_mantannest_com" {
   zone_id = var.cloudflare_zone_id
   name    = "headscale.mantannest.com"
