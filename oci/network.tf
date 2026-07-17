@@ -1,6 +1,6 @@
 module "vcn" {
   source                       = "oracle-terraform-modules/vcn/oci"
-  version                      = "3.6.0"
+  version                      = "4.0.0"
   compartment_id               = var.oci_compartment_ocid
   region                       = var.oci_region
   internet_gateway_route_rules = null
