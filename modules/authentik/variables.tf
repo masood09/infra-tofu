@@ -10,3 +10,8 @@ variable "users_obj" {
 variable "apps_obj" {
   type = map(any) # easiest while iterating; you can strongly type later
 }
+
+variable "ldap_obj" {
+  type    = any # { base_dn = string, access_groups = list(string) }
+  default = null
+}
