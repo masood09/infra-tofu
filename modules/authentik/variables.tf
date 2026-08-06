@@ -15,3 +15,8 @@ variable "ldap_obj" {
   type    = any # { base_dn = string, access_groups = list(string) }
   default = null
 }
+
+variable "proxy_apps_obj" {
+  type    = any # map of { name, slug, access = [{group, order}], provider = { name, external_host, internal_host } }
+  default = {}
+}

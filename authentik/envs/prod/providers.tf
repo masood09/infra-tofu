@@ -31,6 +31,14 @@ data "sops_file" "ldap" {
   source_file = "${path.module}/secrets/ldap.sops.json"
 }
 
+# Optional — Proxy Provider apps for services with no OIDC/SAML support of their own
+# (SABnzbd, and eventually Sonarr/Radarr/Prowlarr). Absent, proxy_apps_obj stays empty
+# and modules/authentik/proxy.tf provisions nothing.
+data "sops_file" "proxy_apps" {
+  count       = fileexists("${path.module}/secrets/proxy-apps.sops.json") ? 1 : 0
+  source_file = "${path.module}/secrets/proxy-apps.sops.json"
+}
+
 locals {
   users_obj = jsondecode(nonsensitive(data.sops_file.users.raw)).users
   apps_raw  = jsondecode(nonsensitive(data.sops_file.apps.raw)).apps
@@ -39,6 +47,21 @@ locals {
   ldap_obj = local.ldap_raw == null ? null : {
     base_dn       = local.ldap_raw.base_dn
     access_groups = try(local.ldap_raw.access_groups, [])
+  }
+
+  proxy_apps_raw = length(data.sops_file.proxy_apps) > 0 ? jsondecode(nonsensitive(data.sops_file.proxy_apps[0].raw)).proxy_apps : {}
+  proxy_apps_obj = {
+    for app_key, app in local.proxy_apps_raw : app_key => {
+      name   = app.name
+      slug   = app.slug
+      access = try(app.access, [])
+
+      provider = {
+        name          = app.provider.name
+        external_host = app.provider.external_host
+        internal_host = app.provider.internal_host
+      }
+    }
   }
 
   apps_obj = {
