@@ -2,9 +2,54 @@ locals {
   ldap_enabled = var.ldap_obj != null
 }
 
-data "authentik_flow" "default-authentication-flow" {
+# The stock default-authentication-flow includes an MFA/authenticator-validation
+# stage. LDAP has no way to submit a separate OTP field, so binding the Jellyfin
+# LDAP provider to it would force users to concatenate password+OTP as their
+# LDAP password. Instead we reuse the same identification/password/login stage
+# objects (a stage can be bound into multiple flows) minus the MFA stage, in a
+# dedicated flow just for the LDAP outpost.
+data "authentik_stage" "default_authentication_identification" {
   count = local.ldap_enabled ? 1 : 0
-  slug  = "default-authentication-flow"
+  name  = "default-authentication-identification"
+}
+
+data "authentik_stage" "default_authentication_password" {
+  count = local.ldap_enabled ? 1 : 0
+  name  = "default-authentication-password"
+}
+
+data "authentik_stage" "default_authentication_login" {
+  count = local.ldap_enabled ? 1 : 0
+  name  = "default-authentication-login"
+}
+
+resource "authentik_flow" "ldap_authentication" {
+  count       = local.ldap_enabled ? 1 : 0
+  name        = "LDAP Authentication (no MFA)"
+  title       = "Welcome to authentik!"
+  slug        = "ldap-authentication-flow"
+  designation = "authentication"
+}
+
+resource "authentik_flow_stage_binding" "ldap_authentication_identification" {
+  count  = local.ldap_enabled ? 1 : 0
+  target = authentik_flow.ldap_authentication[0].uuid
+  stage  = data.authentik_stage.default_authentication_identification[0].id
+  order  = 10
+}
+
+resource "authentik_flow_stage_binding" "ldap_authentication_password" {
+  count  = local.ldap_enabled ? 1 : 0
+  target = authentik_flow.ldap_authentication[0].uuid
+  stage  = data.authentik_stage.default_authentication_password[0].id
+  order  = 20
+}
+
+resource "authentik_flow_stage_binding" "ldap_authentication_login" {
+  count  = local.ldap_enabled ? 1 : 0
+  target = authentik_flow.ldap_authentication[0].uuid
+  stage  = data.authentik_stage.default_authentication_login[0].id
+  order  = 100
 }
 
 resource "authentik_rbac_role" "jellyfin_ldap_search" {
@@ -47,7 +92,7 @@ resource "authentik_provider_ldap" "jellyfin" {
   count       = local.ldap_enabled ? 1 : 0
   name        = "Jellyfin LDAP"
   base_dn     = var.ldap_obj.base_dn
-  bind_flow   = data.authentik_flow.default-authentication-flow[0].id
+  bind_flow   = authentik_flow.ldap_authentication[0].uuid
   unbind_flow = data.authentik_flow.default-invalidation-flow.id
 }
 
