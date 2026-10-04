@@ -3,6 +3,7 @@ module "vcn" {
   version                      = "4.0.0"
   compartment_id               = var.oci_compartment_ocid
   region                       = var.oci_region
+  tenancy_id                   = var.oci_tenancy_ocid
   internet_gateway_route_rules = null
   local_peering_gateways       = null
   nat_gateway_route_rules      = null
