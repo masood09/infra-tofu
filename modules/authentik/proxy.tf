@@ -41,9 +41,10 @@ resource "authentik_provider_proxy" "apps" {
   authorization_flow = data.authentik_flow.default-authorization-flow.id
   invalidation_flow  = data.authentik_flow.default-invalidation-flow.id
 
-  mode          = "proxy"
-  external_host = each.value.provider.external_host
-  internal_host = each.value.provider.internal_host
+  mode            = "proxy"
+  external_host   = each.value.provider.external_host
+  internal_host   = each.value.provider.internal_host
+  skip_path_regex = try(each.value.provider.skip_path_regex, null)
 }
 
 resource "authentik_outpost_provider_attachment" "apps" {

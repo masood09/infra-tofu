@@ -35,10 +35,11 @@ locals {
       access          = try(app.access, [])
 
       provider = {
-        name                 = app.provider.name
-        client_type          = try(app.provider.client_type, "confidential")
-        client_id            = app.provider.client_id
-        client_secret        = try(app.provider.client_secret, null)
+        name                  = app.provider.name
+        client_type           = try(app.provider.client_type, "confidential")
+        client_id             = app.provider.client_id
+        client_secret         = try(app.provider.client_secret, null)
+        grant_types           = try(app.provider.grant_types, ["authorization_code", "hybrid", "implicit", "client_credentials", "password", "urn:ietf:params:oauth:grant-type:device_code", "refresh_token"])
         allowed_redirect_uris = app.provider.allowed_redirect_uris
 
         access_code_validity    = try(app.provider.access_code_validity, "minutes=1")
@@ -46,7 +47,7 @@ locals {
         refresh_token_threshold = try(app.provider.refresh_token_threshold, "seconds=0")
         refresh_token_validity  = try(app.provider.refresh_token_validity, "days=30")
 
-        sub_mode = try(app.provider.sub_mode, "hashed_user_id")
+        sub_mode             = try(app.provider.sub_mode, "hashed_user_id")
         extra_managed_scopes = try(app.provider.extra_managed_scopes, [])
 
         logout_method = try(app.provider.logout_method, null)

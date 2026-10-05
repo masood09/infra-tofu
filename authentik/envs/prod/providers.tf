@@ -57,9 +57,10 @@ locals {
       access = try(app.access, [])
 
       provider = {
-        name          = app.provider.name
-        external_host = app.provider.external_host
-        internal_host = app.provider.internal_host
+        name            = app.provider.name
+        external_host   = app.provider.external_host
+        internal_host   = app.provider.internal_host
+        skip_path_regex = try(app.provider.skip_path_regex, null)
       }
     }
   }
@@ -76,6 +77,7 @@ locals {
         client_type           = try(app.provider.client_type, "confidential")
         client_id             = app.provider.client_id
         client_secret         = try(app.provider.client_secret, null)
+        grant_types           = try(app.provider.grant_types, ["authorization_code", "hybrid", "implicit", "client_credentials", "password", "urn:ietf:params:oauth:grant-type:device_code", "refresh_token"])
         allowed_redirect_uris = app.provider.allowed_redirect_uris
 
         access_code_validity    = try(app.provider.access_code_validity, "minutes=1")

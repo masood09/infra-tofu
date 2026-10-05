@@ -35,10 +35,11 @@ resource "authentik_provider_oauth2" "apps" {
   client_type   = try(each.value.provider.client_type, "confidential")
   client_id     = each.value.provider.client_id
   client_secret = try(each.value.provider.client_secret, null)
+  grant_types   = try(each.value.provider.grant_types, ["authorization_code", "hybrid", "implicit", "client_credentials", "password", "urn:ietf:params:oauth:grant-type:device_code", "refresh_token"])
 
   allowed_redirect_uris = each.value.provider.allowed_redirect_uris
 
-  invalidation_flow       = data.authentik_flow.default-invalidation-flow.id
+  invalidation_flow = data.authentik_flow.default-invalidation-flow.id
 
   property_mappings = distinct(concat(
     data.authentik_property_mapping_provider_scope.scopes[each.key].ids,
@@ -50,7 +51,7 @@ resource "authentik_provider_oauth2" "apps" {
   refresh_token_threshold = try(each.value.provider.refresh_token_threshold, "seconds=0")
   refresh_token_validity  = try(each.value.provider.refresh_token_validity, "days=30")
 
-  signing_key             = data.authentik_certificate_key_pair.generated.id
+  signing_key = data.authentik_certificate_key_pair.generated.id
 
   # Optional Subject mode.
   sub_mode = try(each.value.provider.sub_mode, "hashed_user_id")
