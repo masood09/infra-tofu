@@ -32,7 +32,7 @@ resource "cloudflare_dns_record" "boot_accesscontrolsystem_oci" {
   proxied = false
 }
 
-# Matrix / Element chat, Nightscout, Karakeep
+# Matrix / Element chat, Karakeep
 resource "cloudflare_dns_record" "commrelay_oci" {
   zone_id = var.cloudflare_zone_id
   name    = "commrelay.oci.mantannest.com"
@@ -125,16 +125,6 @@ resource "cloudflare_dns_record" "mas_chat_mantannest_com" {
 resource "cloudflare_dns_record" "rtc_chat_mantannest_com" {
   zone_id = var.cloudflare_zone_id
   name    = "rtc.chat.mantannest.com"
-  content = cloudflare_dns_record.commrelay_oci.name
-  type    = "CNAME"
-  ttl     = 1
-  proxied = false
-}
-
-# Health – Nightscout CGM dashboard
-resource "cloudflare_dns_record" "nightscout_mantannest_com" {
-  zone_id = var.cloudflare_zone_id
-  name    = "nightscout.mantannest.com"
   content = cloudflare_dns_record.commrelay_oci.name
   type    = "CNAME"
   ttl     = 1
