@@ -61,6 +61,9 @@ terraform.rc
 credentials.auto.tfvars
 sensitive.auto.tfvars
 
+# Decrypted UniFi SOPS JSON configuration
+unifi/*.auto.tfvars.json
+
 kubeconfig
 kubeconfig.yaml
 talosconfig
