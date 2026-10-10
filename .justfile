@@ -158,6 +158,10 @@ discover-unifi: decrypt-unifi
 	cd {{UNIFI_DIR}} && tofu output -json inventory
 	just clean-unifi
 
+inventory-unifi-wifi: decrypt-unifi
+	bash scripts/unifi-wifi-inventory.sh {{UNIFI_PLAIN}}
+	just clean-unifi
+
 plan-unifi: decrypt-unifi decrypt-unifi-networks
 	cd {{UNIFI_DIR}} && tofu plan -input=false
 	just clean-unifi clean-unifi-networks
