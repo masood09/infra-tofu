@@ -103,3 +103,18 @@ variable "unifi_fixed_ips" {
     fixed_ip  = string
   }))
 }
+
+variable "unifi_firewall_zones" {
+  description = "UniFi firewall zones loaded from encrypted configuration."
+  type        = map(any)
+}
+
+variable "unifi_firewall_groups" {
+  description = "UniFi firewall groups loaded from encrypted configuration."
+  type        = map(any)
+}
+
+variable "unifi_firewall_policies" {
+  description = "User-created UniFi firewall policies loaded from encrypted configuration."
+  type        = any
+}
