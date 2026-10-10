@@ -10,6 +10,7 @@ OUTPUT_TYPE := "binary"
 OCI_DIR := "oci"
 AK_PROD_DIR := "authentik/envs/prod"
 AK_TEST_DIR := "authentik/envs/test"
+UNIFI_DIR := "unifi"
 
 OCI_PLAIN := OCI_DIR + "/sensitive.auto.tfvars"
 OCI_ENC   := OCI_DIR + "/sensitive.auto.tfvars.enc"
@@ -18,6 +19,8 @@ AK_PROD_PLAIN := AK_PROD_DIR + "/sensitive.auto.tfvars"
 AK_PROD_ENC   := AK_PROD_DIR + "/sensitive.auto.tfvars.enc"
 AK_TEST_PLAIN := AK_TEST_DIR + "/sensitive.auto.tfvars"
 AK_TEST_ENC   := AK_TEST_DIR + "/sensitive.auto.tfvars.enc"
+UNIFI_PLAIN   := UNIFI_DIR + "/sensitive.auto.tfvars"
+UNIFI_ENC     := UNIFI_DIR + "/sensitive.auto.tfvars.enc"
 
 # -----------------------------
 # Helpers
@@ -26,7 +29,7 @@ _check-tools:
 	@command -v {{SOPS}} >/dev/null || { echo "❌ sops not found in PATH"; exit 1; }
 
 _check-dirs:
-	@mkdir -p {{OCI_DIR}} {{AK_PROD_DIR}} {{AK_TEST_DIR}}
+	@mkdir -p {{OCI_DIR}} {{AK_PROD_DIR}} {{AK_TEST_DIR}} {{UNIFI_DIR}}
 
 # -----------------------------
 # Encrypt
@@ -45,6 +48,11 @@ encrypt-ak-test: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{AK_TEST_PLAIN}} -> {{AK_TEST_ENC}} (binary)"
 	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{AK_TEST_PLAIN}} > {{AK_TEST_ENC}}
 	@echo "✅ Wrote {{AK_TEST_ENC}}"
+
+encrypt-unifi: _check-tools _check-dirs
+	@echo "🔐 Encrypting {{UNIFI_PLAIN}} -> {{UNIFI_ENC}} (binary)"
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_PLAIN}} > {{UNIFI_ENC}}
+	@echo "✅ Wrote {{UNIFI_ENC}}"
 
 encrypt: encrypt-oci encrypt-ak-prod encrypt-ak-test
 	@echo "✅ Encrypted all"
@@ -70,6 +78,12 @@ decrypt-ak-test: _check-tools _check-dirs
 	@echo "✅ Wrote {{AK_TEST_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{AK_TEST_PLAIN}}"
 
+decrypt-unifi: _check-tools _check-dirs
+	@echo "🔓 Decrypting {{UNIFI_ENC}} -> {{UNIFI_PLAIN}} (binary)"
+	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_ENC}} > {{UNIFI_PLAIN}}
+	@echo "✅ Wrote {{UNIFI_PLAIN}}"
+	@echo "⚠️  Do NOT commit {{UNIFI_PLAIN}}"
+
 decrypt: decrypt-oci decrypt-ak-prod decrypt-ak-test
 	@echo "✅ Decrypted all"
 
@@ -91,7 +105,12 @@ clean-ak-test:
 	rm -f {{AK_TEST_PLAIN}}
 	@echo "✅ Clean"
 
-clean: clean-oci clean-ak-prod clean-ak-test
+clean-unifi:
+	@echo "🧹 Removing {{UNIFI_PLAIN}}"
+	rm -f {{UNIFI_PLAIN}}
+	@echo "✅ Clean"
+
+clean: clean-oci clean-ak-prod clean-ak-test clean-unifi
 	@echo "✅ Cleaned all"
 
 # -----------------------------
@@ -120,6 +139,15 @@ plan-ak-test: decrypt-ak-test
 apply-ak-test: decrypt-ak-test
 	cd {{AK_TEST_DIR}} && tofu apply
 	just clean-ak-test
+
+discover-unifi: decrypt-unifi
+	cd {{UNIFI_DIR}} && tofu init -upgrade -input=false && tofu apply -refresh-only -auto-approve -input=false
+	cd {{UNIFI_DIR}} && tofu output -json inventory
+	just clean-unifi
+
+plan-unifi: decrypt-unifi
+	cd {{UNIFI_DIR}} && tofu plan -input=false
+	just clean-unifi
 
 
 # -----------------------------

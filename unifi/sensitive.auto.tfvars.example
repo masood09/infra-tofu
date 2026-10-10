@@ -1,0 +1,5 @@
+unifi_api_url        = "https://127.0.0.1"
+unifi_username       = "replace-me"
+unifi_password       = "replace-me"
+unifi_site           = "default"
+unifi_allow_insecure = true
