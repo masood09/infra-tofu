@@ -1,0 +1,5 @@
+unifi_api_url        = "https://10.0.1.1"
+unifi_username       = "tofu-local-admin"
+unifi_password       = "replace-me"
+unifi_site           = "default"
+unifi_allow_insecure = true
