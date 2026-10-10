@@ -207,7 +207,7 @@ plan-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-uni
 	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns
 
 apply-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns
-	cd {{UNIFI_DIR}} && tofu init -upgrade -input=false && tofu apply -auto-approve -input=false
+	cd {{UNIFI_DIR}} && tofu init -upgrade -input=false && tofu apply
 	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns
 
 
