@@ -43,6 +43,7 @@ jq '[.data[] | {
   enabled,
   security,
   network_id: .networkconf_id,
+  user_group_id: .usergroup_id,
   wlan_band,
   wlan_bands,
   is_guest,

@@ -23,6 +23,8 @@ UNIFI_PLAIN   := UNIFI_DIR + "/sensitive.auto.tfvars"
 UNIFI_ENC     := UNIFI_DIR + "/sensitive.auto.tfvars.enc"
 UNIFI_NETWORKS_PLAIN := UNIFI_DIR + "/networks.auto.tfvars.json"
 UNIFI_NETWORKS_ENC   := UNIFI_DIR + "/networks.auto.tfvars.json.enc"
+UNIFI_WLANS_PLAIN := UNIFI_DIR + "/wlans.auto.tfvars.json"
+UNIFI_WLANS_ENC   := UNIFI_DIR + "/wlans.auto.tfvars.json.enc"
 
 # -----------------------------
 # Helpers
@@ -38,23 +40,28 @@ _check-dirs:
 # -----------------------------
 encrypt-oci: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{OCI_PLAIN}} -> {{OCI_ENC}} (binary)"
-	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{OCI_PLAIN}} > {{OCI_ENC}}
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{OCI_ENC}} {{OCI_PLAIN}}
 	@echo "✅ Wrote {{OCI_ENC}}"
 
 encrypt-ak-prod: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{AK_PROD_PLAIN}} -> {{AK_PROD_ENC}} (binary)"
-	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{AK_PROD_PLAIN}} > {{AK_PROD_ENC}}
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{AK_PROD_ENC}} {{AK_PROD_PLAIN}}
 	@echo "✅ Wrote {{AK_PROD_ENC}}"
 
 encrypt-ak-test: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{AK_TEST_PLAIN}} -> {{AK_TEST_ENC}} (binary)"
-	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{AK_TEST_PLAIN}} > {{AK_TEST_ENC}}
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{AK_TEST_ENC}} {{AK_TEST_PLAIN}}
 	@echo "✅ Wrote {{AK_TEST_ENC}}"
 
 encrypt-unifi: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{UNIFI_PLAIN}} -> {{UNIFI_ENC}} (binary)"
-	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_PLAIN}} > {{UNIFI_ENC}}
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_ENC}} {{UNIFI_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_ENC}}"
+
+encrypt-unifi-wlans: _check-tools _check-dirs
+	@echo "🔐 Encrypting {{UNIFI_WLANS_PLAIN}} -> {{UNIFI_WLANS_ENC}} (JSON)"
+	{{SOPS}} -e --output {{UNIFI_WLANS_ENC}} {{UNIFI_WLANS_PLAIN}}
+	@echo "✅ Wrote {{UNIFI_WLANS_ENC}}"
 
 encrypt: encrypt-oci encrypt-ak-prod encrypt-ak-test
 	@echo "✅ Encrypted all"
@@ -92,6 +99,12 @@ decrypt-unifi-networks: _check-tools _check-dirs
 	@echo "✅ Wrote {{UNIFI_NETWORKS_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{UNIFI_NETWORKS_PLAIN}}"
 
+decrypt-unifi-wlans: _check-tools _check-dirs
+	@echo "🔓 Decrypting {{UNIFI_WLANS_ENC}} -> {{UNIFI_WLANS_PLAIN}} (JSON)"
+	{{SOPS}} -d --output-type json {{UNIFI_WLANS_ENC}} > {{UNIFI_WLANS_PLAIN}}
+	@echo "✅ Wrote {{UNIFI_WLANS_PLAIN}}"
+	@echo "⚠️  Do NOT commit {{UNIFI_WLANS_PLAIN}}"
+
 decrypt: decrypt-oci decrypt-ak-prod decrypt-ak-test
 	@echo "✅ Decrypted all"
 
@@ -121,6 +134,11 @@ clean-unifi:
 clean-unifi-networks:
 	@echo "🧹 Removing {{UNIFI_NETWORKS_PLAIN}}"
 	rm -f {{UNIFI_NETWORKS_PLAIN}}
+	@echo "✅ Clean"
+
+clean-unifi-wlans:
+	@echo "🧹 Removing {{UNIFI_WLANS_PLAIN}}"
+	rm -f {{UNIFI_WLANS_PLAIN}}
 	@echo "✅ Clean"
 
 clean: clean-oci clean-ak-prod clean-ak-test clean-unifi
@@ -162,13 +180,13 @@ inventory-unifi-wifi: decrypt-unifi
 	bash scripts/unifi-wifi-inventory.sh {{UNIFI_PLAIN}}
 	just clean-unifi
 
-plan-unifi: decrypt-unifi decrypt-unifi-networks
+plan-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans
 	cd {{UNIFI_DIR}} && tofu plan -input=false
-	just clean-unifi clean-unifi-networks
+	just clean-unifi clean-unifi-networks clean-unifi-wlans
 
-apply-unifi: decrypt-unifi decrypt-unifi-networks
+apply-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans
 	cd {{UNIFI_DIR}} && tofu init -upgrade -input=false && tofu apply -auto-approve -input=false
-	just clean-unifi clean-unifi-networks
+	just clean-unifi clean-unifi-networks clean-unifi-wlans
 
 
 # -----------------------------

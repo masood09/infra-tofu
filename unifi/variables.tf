@@ -50,3 +50,32 @@ variable "unifi_networks" {
     })
   }))
 }
+
+variable "unifi_wlans" {
+  description = "UniFi WLAN definitions loaded from the encrypted WLAN tfvars file."
+  type = map(object({
+    id                  = string
+    name                = string
+    enabled             = bool
+    security            = string
+    network_id          = string
+    user_group_id       = string
+    wlan_bands          = set(string)
+    is_guest            = bool
+    l2_isolation        = bool
+    hide_ssid           = bool
+    wpa                 = optional(object({
+      mode = optional(string)
+      enc  = optional(string)
+    }))
+    wpa3                = optional(object({
+      support       = optional(bool)
+      transition    = optional(bool)
+      fast_roaming  = optional(bool)
+      enhanced_192  = optional(bool)
+    }))
+    pmf_mode            = string
+    fast_roaming_enabled = bool
+    passphrase          = optional(string)
+  }))
+}
