@@ -79,3 +79,18 @@ variable "unifi_wlans" {
     passphrase          = optional(string)
   }))
 }
+
+variable "unifi_dns_records" {
+  description = "UniFi local DNS records loaded from the encrypted DNS tfvars file."
+  type = map(object({
+    id          = string
+    name        = string
+    enabled     = bool
+    record_type = string
+    value       = string
+    port        = number
+    priority    = number
+    ttl         = string
+    weight      = number
+  }))
+}
