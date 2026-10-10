@@ -180,6 +180,10 @@ inventory-unifi-wifi: decrypt-unifi
 	bash scripts/unifi-wifi-inventory.sh {{UNIFI_PLAIN}}
 	just clean-unifi
 
+inventory-unifi-dns: decrypt-unifi
+	bash scripts/unifi-dns-inventory.sh {{UNIFI_PLAIN}}
+	just clean-unifi
+
 plan-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans
 	cd {{UNIFI_DIR}} && tofu plan -input=false
 	just clean-unifi clean-unifi-networks clean-unifi-wlans
