@@ -21,6 +21,8 @@ AK_TEST_PLAIN := AK_TEST_DIR + "/sensitive.auto.tfvars"
 AK_TEST_ENC   := AK_TEST_DIR + "/sensitive.auto.tfvars.enc"
 UNIFI_PLAIN   := UNIFI_DIR + "/sensitive.auto.tfvars"
 UNIFI_ENC     := UNIFI_DIR + "/sensitive.auto.tfvars.enc"
+UNIFI_NETWORKS_PLAIN := UNIFI_DIR + "/networks.auto.tfvars.json"
+UNIFI_NETWORKS_ENC   := UNIFI_DIR + "/networks.auto.tfvars.json.enc"
 
 # -----------------------------
 # Helpers
@@ -84,6 +86,12 @@ decrypt-unifi: _check-tools _check-dirs
 	@echo "✅ Wrote {{UNIFI_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{UNIFI_PLAIN}}"
 
+decrypt-unifi-networks: _check-tools _check-dirs
+	@echo "🔓 Decrypting {{UNIFI_NETWORKS_ENC}} -> {{UNIFI_NETWORKS_PLAIN}} (JSON)"
+	{{SOPS}} -d --output-type json {{UNIFI_NETWORKS_ENC}} > {{UNIFI_NETWORKS_PLAIN}}
+	@echo "✅ Wrote {{UNIFI_NETWORKS_PLAIN}}"
+	@echo "⚠️  Do NOT commit {{UNIFI_NETWORKS_PLAIN}}"
+
 decrypt: decrypt-oci decrypt-ak-prod decrypt-ak-test
 	@echo "✅ Decrypted all"
 
@@ -108,6 +116,11 @@ clean-ak-test:
 clean-unifi:
 	@echo "🧹 Removing {{UNIFI_PLAIN}}"
 	rm -f {{UNIFI_PLAIN}}
+	@echo "✅ Clean"
+
+clean-unifi-networks:
+	@echo "🧹 Removing {{UNIFI_NETWORKS_PLAIN}}"
+	rm -f {{UNIFI_NETWORKS_PLAIN}}
 	@echo "✅ Clean"
 
 clean: clean-oci clean-ak-prod clean-ak-test clean-unifi
@@ -145,9 +158,13 @@ discover-unifi: decrypt-unifi
 	cd {{UNIFI_DIR}} && tofu output -json inventory
 	just clean-unifi
 
-plan-unifi: decrypt-unifi
+plan-unifi: decrypt-unifi decrypt-unifi-networks
 	cd {{UNIFI_DIR}} && tofu plan -input=false
-	just clean-unifi
+	just clean-unifi clean-unifi-networks
+
+apply-unifi: decrypt-unifi decrypt-unifi-networks
+	cd {{UNIFI_DIR}} && tofu init -upgrade -input=false && tofu apply -auto-approve -input=false
+	just clean-unifi clean-unifi-networks
 
 
 # -----------------------------

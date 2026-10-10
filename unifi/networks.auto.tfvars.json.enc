@@ -1,0 +1,207 @@
+{
+  "unifi_networks": {
+    "default": {
+      "id": "ENC[AES256_GCM,data:RLIVZxAueIJmWS0XjLNLvskFypI6XfLg,iv:xQgN9s3rpyo1TAnert7nGx/Z6HlllzAQvaJG49N3dUw=,tag:ByEx2QLGUHwA0jl63Zg6kA==,type:str]",
+      "name": "ENC[AES256_GCM,data:KKhwn2eazA==,iv:nIM0xGjv0q1OrQ8XETGMl5Lj1fUtXADJE6OA0NOxfRY=,tag:P8jGenUEbOhU9LOIUfR/vA==,type:str]",
+      "domain_name": "ENC[AES256_GCM,data:qUXrmh4upgwM0puJTiW4VKGz5RCGCGWgsHeH,iv:Kz/+7uhevuFAWpK7yCI372E/53+G3WEpCuUOdmqe2So=,tag:JcLZ2QN66KyAxUnh7d3AKQ==,type:str]",
+      "enabled": "ENC[AES256_GCM,data:CJoe8w==,iv:kU/RllgzoCAq0IrcB7oavX06x0hZhZC1TZyZibTz76E=,tag:OqPvzKmeMzp1NlW9bKCwlA==,type:bool]",
+      "gateway_type": "ENC[AES256_GCM,data:uMOHYdK0FA==,iv:+5ltKuchO7R6AfFmqm/M7WEmZT9UpwKesrSj6hD6XC4=,tag:zmTPW/bXwhHp1PtPQsH/Pw==,type:str]",
+      "internet_access": "ENC[AES256_GCM,data:2/Dp7Q==,iv:XgeKKYttGf5TYCxYWqESmUq9oNTD9klckypMMOtu2ls=,tag:0ajSVFQfBnZjhV/bwbf/yg==,type:bool]",
+      "multicast_dns": "ENC[AES256_GCM,data:PZhZPwM=,iv:RzuXa1C91lByMlhZthPMfvrYTiFOszJwjn02v7r5k3s=,tag:hNDV18Ud0VnWnMSH7xIJpA==,type:bool]",
+      "network_isolation": "ENC[AES256_GCM,data:7sP3Xz0=,iv:RLOm7iyzzJpJ5AOqbOe50ROaTXag4LT361WnPRXvh4o=,tag:fGbdq1BLSgwuUQyA0ORjrQ==,type:bool]",
+      "purpose": "ENC[AES256_GCM,data:sCla/oTdj71w,iv:ATCNoU6XDaLA4XHe1RTlCOFkq3Qxpj0kDta1/MMhKAY=,tag:4QJx9qYkOiuNbS1f3hZPkw==,type:str]",
+      "subnet": "ENC[AES256_GCM,data:byvWc9z3l3lr0nE=,iv:oV9YNtPKBu+ZaKozG75TlB84Ob2XUL7KVWsahxw3VrM=,tag:YSbXtRDwhz+qaq5EXStgMw==,type:str]",
+      "vlan": null,
+      "dhcp": {
+        "start": "ENC[AES256_GCM,data:r9Dkd397VshfqQ==,iv:oCwODpcwAsNcYxS8tIxmsoPmj0+nZwYqqRjzh5nor1k=,tag:JBDNFz55fvkrtE/I2MTbSw==,type:str]",
+        "stop": "ENC[AES256_GCM,data:zJuQ1Tq6whUzAw==,iv:6glQJm0W1a99D2C209Y96OTMB3qCvsdyAlKmOuwFQoM=,tag:JztDBrSDVO9iAvT6TagGCg==,type:str]",
+        "dns_enabled": "ENC[AES256_GCM,data:7/82kdE=,iv:7vXu9a9X3gA8lkGWtlR7L+HFjLf8fM+n0lWyfyCwH2A=,tag:wV+1xuVExcQwbClKJkefKg==,type:bool]",
+        "dns_servers": null
+      }
+    },
+    "dmz": {
+      "id": "ENC[AES256_GCM,data:jaHTsPXEF/V1eZ3PX0Iu81Cj4LlIF1wz,iv:8EF0twPUuQ7QKQLWi5rsJofVhQ0Rwg9Fhz+QmGgPTc0=,tag:4YguRRgU2fy5JumUiCy3Ew==,type:str]",
+      "name": "ENC[AES256_GCM,data:qTVxL40=,iv:CUDf6nYYKGGbo7HYbCFf2Q5N3iTMzNukpGCxKrEV9rM=,tag:c2Ehgxa4T9pdNdcMMIEEDg==,type:str]",
+      "domain_name": "ENC[AES256_GCM,data:ybQtHMfqMutJWr86GU+g0UkidaNAMMgcDR0=,iv:ttGT8hGXbMq4nd97oVKJxYr7iseec2MoRlENtvno0WM=,tag:NI+cKIBNki9rWLQn1TEOZg==,type:str]",
+      "enabled": "ENC[AES256_GCM,data:GFlelA==,iv:j6Xpsq/cQNfdB46Q4u8h/nWbO0lfGPxWjFtavOMWwuI=,tag:894gwauc3J/8kxF2JCjgig==,type:bool]",
+      "gateway_type": "ENC[AES256_GCM,data:n9Sv3eawow==,iv:5y5iRIa+WFgnH8XtvHIv2hWpHloBwKtnmfhVW5kR9b8=,tag:hNQJBzieVGO4XrNYcKXA9w==,type:str]",
+      "internet_access": "ENC[AES256_GCM,data:B1PQ/g==,iv:ZuzEcc4bDJNaOYsMl2HFY3W/ffvVdnJ/uqO0D86c4DQ=,tag:Q6OHkO6kfq6PcazZ4TrMcw==,type:bool]",
+      "multicast_dns": "ENC[AES256_GCM,data:qYrj5Zc=,iv:zu/f2HGOaey07FdEQ9Y8SESDma1u0eSUySBa3xCSC7o=,tag:um0/T1LA0cGN0a+BSWoQAw==,type:bool]",
+      "network_isolation": "ENC[AES256_GCM,data:eDRAoQ==,iv:rNmWInB4X63vwGSGmqXbUW6RH/PqT87EnghsABL3DZk=,tag:xWoGWsGEcZmGQOEHJm6m1A==,type:bool]",
+      "purpose": "ENC[AES256_GCM,data:fNechHBaAiWC,iv:nvf2dWNFxNeF78k7r+coRqpaivpCwHyfmTrpAZQreWM=,tag:0jt+QZl2ppp6Fmt1zspgbg==,type:str]",
+      "subnet": "ENC[AES256_GCM,data:daiYYBFBUMzShiTc,iv:3OHS4qhg8xg4mBODQPK2ZbDK6ebmS/VcW4GQc6mZT/U=,tag:gqdradxcZr+nDgFHQAowpQ==,type:str]",
+      "vlan": "ENC[AES256_GCM,data:TtI=,iv:q5YnIi8fSF4NWw+nnjlNgdRaaHXKPO+8A59RTTpmZbw=,tag:0fiJ5+WBPYY5OG4CZXDEeA==,type:int]",
+      "dhcp": {
+        "start": "ENC[AES256_GCM,data:Eyl370A7D0fkE0M=,iv:f2Be89X1R25tgi7IIb3yfINaLRllQp0IMOlu3LrJrqQ=,tag:08b/HxKSN3C5+apITFyggA==,type:str]",
+        "stop": "ENC[AES256_GCM,data:hcRZN07waBKvyaw=,iv:OF2IT9Q2+btVfrbtGTUoFD+lvufBvwEKyHnYkev08ug=,tag:WOgZsx0Z5FICsS9QjiM1xw==,type:str]",
+        "dns_enabled": "ENC[AES256_GCM,data:cdfU908=,iv:s6uyHQj0joPEXYOSVTb+fNCAdeT4dwnxPmxfU23gRfc=,tag:N0OePr1MtaxyLShhho51bQ==,type:bool]",
+        "dns_servers": null
+      }
+    },
+    "server": {
+      "id": "ENC[AES256_GCM,data:R6DMN2ktG4t7Uy7YayoZh8w2BlKrD0C0,iv:HeIXCpidty1zcpq2+tPCsmhN8UenfHKIryQsVmCHMTI=,tag:9sTncGZ67ICZdBJeKoKRkA==,type:str]",
+      "name": "ENC[AES256_GCM,data:u8Zca0rkiXM=,iv:OpbYiY9a+LybDlWDGPnvb80rbrD//ETXDgWC/rE4Vr4=,tag:1oylso4DsYn9/dzlB9dyFg==,type:str]",
+      "domain_name": "ENC[AES256_GCM,data:szrL9j9kXPhQqSF9wEXry5j8C0fIVoF+Za023q4=,iv:8GuUJmjYKZ/xo4YYBEGzNGU9pzNdUuMiBRGXw0izatA=,tag:XFFeLgAF0Boox8kNpZmkqw==,type:str]",
+      "enabled": "ENC[AES256_GCM,data:KPkWPQ==,iv:GGBu2vV3Y2C22hgTfAi2TaVkiCTU+/i4R5ATV5JzVEE=,tag:WFj8HixApB5nkLQNmBM2Pg==,type:bool]",
+      "gateway_type": "ENC[AES256_GCM,data:WBIAPTDzFQ==,iv:2Qr+RCU3451es9UhIB6toVKlyLoPpouFWbiD8udFQSQ=,tag:N+vjmZjQq3uVE5GfsKitEQ==,type:str]",
+      "internet_access": "ENC[AES256_GCM,data:riAnJg==,iv:sJKvmgEG6qMr/XaIB8G3Htw2M5Y4k7QQLFxcMIX+Xao=,tag:3q/wJqbFonZweNsW1Faojw==,type:bool]",
+      "multicast_dns": "ENC[AES256_GCM,data:lgciFLE=,iv:SPR/jCDJHGt4MfWCXUFLQLLYWGGrNHbPuo433Oa0Gu0=,tag:twbnO6SYSTY7JS4NCyWw8w==,type:bool]",
+      "network_isolation": "ENC[AES256_GCM,data:R8Dznqc=,iv:Lkv33HmBHxc72oWZZlOrK4AT3y6mgjx/G6Swp9r3PU4=,tag:1OBjd1n81ipVA7AiVJd5zQ==,type:bool]",
+      "purpose": "ENC[AES256_GCM,data:+50AdKof0cql,iv:6f96mI5lFBbwKCnW4ibMCeiIkXBV2Ff2TOVc6p9TQg4=,tag:okdjzA528e0T0WSWMn8VlA==,type:str]",
+      "subnet": "ENC[AES256_GCM,data:itergQQV2JfjDWTv,iv:KIjHuGnZiGRVc5kCM141VkN0ZIuqg3cSgjcqBC7CSlk=,tag:SBQ2cnSS/XNMu4Obja+AtQ==,type:str]",
+      "vlan": "ENC[AES256_GCM,data:rTo=,iv:OkBBIKSdvDc2PHruiALLWcV8kbmk+qtMgmK7Lfro59I=,tag:KwuroQforfRCi5ueU5pOgQ==,type:int]",
+      "dhcp": {
+        "start": "ENC[AES256_GCM,data:OIf3gw4gjIFZpGU=,iv:8PyALAa4xyKlzdxLFrKQiD0wRrzHNAknZmYnAJPoKo8=,tag:/bZESGhD/gt7NnydGlrLgQ==,type:str]",
+        "stop": "ENC[AES256_GCM,data:7zbVxVQxJT88ykE=,iv:jBEVoLPQkNmPJNOcI8mPLaFp8LDzjVJ2kd9L1dpSeVM=,tag:6l84gxvc0M77Fm9N2iQGvQ==,type:str]",
+        "dns_enabled": "ENC[AES256_GCM,data:HD+eUj0=,iv:Zg5ybXsDQRTPWFywapeILDv3zGZhs+Rmzxy+gl5k5s8=,tag:Apc3I1BifsqF+eUj04SNlQ==,type:bool]",
+        "dns_servers": [
+          "ENC[AES256_GCM,data:dbGPT37+U7fn,iv:VxOqnAW1f21PJKYYyZEy6SQLOmtQomYm45LA42vphYI=,tag:JvG/7Trml45kAzO2ZzCZrw==,type:str]"
+        ]
+      }
+    },
+    "home": {
+      "id": "ENC[AES256_GCM,data:m1QX4c2Efj7pkQK1El3ONaErnPdDXjrx,iv:iaC+N7eP82YdBvMIkTSO13jHwbFBENN7e02cmeA7VEA=,tag:4l9dOm8hYAlPa3EMY2g0Lg==,type:str]",
+      "name": "ENC[AES256_GCM,data:Kd8pcz6y,iv:LtR5fjDaj9M5YMkPvuLk3UiAqt6naRIxSbyYs1I8Re8=,tag:Q40MP/DI97jBS0w8WWBWnQ==,type:str]",
+      "domain_name": "ENC[AES256_GCM,data:y2fr6A1sJy2kQIK44JwvukXjb9pLpAxOZ+TZ,iv:1vrUJRwO3t/G2uANw+JrkR1RWRQmV++KNDLpmAybYIo=,tag:6xNyw/mkJWWogsodE3DS/w==,type:str]",
+      "enabled": "ENC[AES256_GCM,data:17Mm8w==,iv:DfABgLSd6zRbbMOi2XguhDB5wk0oTI9VXG2PDOODNQU=,tag:yh6PfsaU5HRYHDdGPXna9A==,type:bool]",
+      "gateway_type": "ENC[AES256_GCM,data:IfYx75VS2Q==,iv:SKVN/fb8cZJjsoXTMSYiUq2P0PNEaVpBqatmulGDJ3M=,tag:oPgfS/6MjkGB2PGwcIH7HA==,type:str]",
+      "internet_access": "ENC[AES256_GCM,data:Azxv1Q==,iv:so6HVUwj4wBBBR8EyI0q5n3ivrnDW38x1Ulvj6XuQ/s=,tag:fUXxgd98LCD7iy19NiH/WA==,type:bool]",
+      "multicast_dns": "ENC[AES256_GCM,data:yF5LUQ==,iv:eSx262JV4Pq8VPmW/vgNK57nZQR3dgYjBMEXdmsUEA4=,tag:vE5dxPCnl8qlWBWfIcMoBg==,type:bool]",
+      "network_isolation": "ENC[AES256_GCM,data:hQ05Jk0=,iv:kY4MdD4QPLHGqBqu2XqnNG8hD3pnLH+dXCcaPyLx/04=,tag:5wtmAzcs6psDEwJlcFx/vQ==,type:bool]",
+      "purpose": "ENC[AES256_GCM,data:Gs3oPmBVVW+5,iv:oBPb8zqrDx0wBLe5Ig57pE9ocdT6k9DI2L9qOJxYQEs=,tag:XHPaozHnF2SAxMiIaERxxQ==,type:str]",
+      "subnet": "ENC[AES256_GCM,data:zRQ8DjO0hdNWP1bt,iv:aPvUqTUYWavqEsU5/WAMuXYUDMvTKXHhologXAjghh8=,tag:ohiT9DEiNTlov6TwHH/yzw==,type:str]",
+      "vlan": "ENC[AES256_GCM,data:hJM=,iv:DOUS5rFSB0QxdI9CQVp2dYmMr62SZ2xvWgXIhwyRmt0=,tag:3XpzwVz4E9WclSeWrlYMYg==,type:int]",
+      "dhcp": {
+        "start": "ENC[AES256_GCM,data:1x7IYTw2aO6Iy88=,iv:QS3h+sAB890IpxXthm510MfnItKEqdoejC/HHrCv7Ag=,tag:FKa2NNxpY3bw1UVbAwGX6Q==,type:str]",
+        "stop": "ENC[AES256_GCM,data:YVgl2Vh1CHpKh/Q=,iv:dWT1M9ykL8HH02Bz2izBz+CamlnWfPbWkoI9i5yWT3Y=,tag:99564TC9mtPx3k+gpCMnAw==,type:str]",
+        "dns_enabled": "ENC[AES256_GCM,data:QS93PA==,iv:X8xlAoaPUhFOzDy0TWc4DWrU7fCKQ6qui+wY4yi+tJI=,tag:+oOojJiAOcIOL1vkOYQ1pA==,type:bool]",
+        "dns_servers": [
+          "ENC[AES256_GCM,data:t4HVMNBFWzS6,iv:PjrK4keTZbquLr4IngLYJhMiGlgC02W1T3D+av5ZZsY=,tag:lwIj2nrOjagzB/BgStM3AQ==,type:str]",
+          "ENC[AES256_GCM,data:wH4HOFRFDDeE,iv:9xxa2n6G2PShG2bgsECWtK65uJ6tlb5xB/vh2hDXvQQ=,tag:sVMxADc4RwNs/LFupz6/Iw==,type:str]"
+        ]
+      }
+    },
+    "office": {
+      "id": "ENC[AES256_GCM,data:nH7aXYEYYZbIrxbbSA4arFLRtP7Qc78h,iv:/6hdzOlIoDcCdR+WzXB/eHqcXoVSwmT5K8iF8BmNtWg=,tag:0WZPwOtqPDzgZg4wI3R7dQ==,type:str]",
+      "name": "ENC[AES256_GCM,data:6FFRdhkUQMA=,iv:QBjVJmHpbFKrUFMuAH2QMSCobAilBj8Esh6kdUloZMQ=,tag:Ptm+cvbQhSPbEtpMieM5Ag==,type:str]",
+      "domain_name": "ENC[AES256_GCM,data:to+yKU8n2ktWksGXFYIZiCrlwayU6ElXiDF8dEY=,iv:rGZdxjDwxhl4KXyc+MFbJk7zUyGxUdMItFU32s59Owc=,tag:mzEfdsu1QwzdjduEMs5Eaw==,type:str]",
+      "enabled": "ENC[AES256_GCM,data://S5Ew==,iv:oImY/meXwv9YYCZvryBQZV8ZlbKcuDw38UEYMfY0MoU=,tag:TJl44Xvhc70IDuPQ/nyJow==,type:bool]",
+      "gateway_type": "ENC[AES256_GCM,data:negcuXSivw==,iv:4fHh9ps8wtmhYeW3qR0OEEPtW9Nmj1DSLVyXHh/5B9E=,tag:79j7vpQ8ZpJOM5CJnXyUJQ==,type:str]",
+      "internet_access": "ENC[AES256_GCM,data:gYEANQ==,iv:gHmoIwweGJqCbjScj/kLMoDFrDNmybBs4bGbAN9ywXw=,tag:Xjn1HkTW1xTFjI8rIA72jw==,type:bool]",
+      "multicast_dns": "ENC[AES256_GCM,data:laffQt4=,iv:I1Qs0OIvkZyYBuDt18iJwOhX/eNaRhQhhgonNiiQVEk=,tag:ohVwCsF80ytb48YUoKAaew==,type:bool]",
+      "network_isolation": "ENC[AES256_GCM,data:86WuBA==,iv:2EwGsv0oo1VSvGGkzpALKbWcZLE9ee1eyqERRommRb0=,tag:BMJGrAZvMDMFuGR7UdxJdA==,type:bool]",
+      "purpose": "ENC[AES256_GCM,data:ilQg2yuvez4d,iv:fuTB28c1IERflyw+3btC6BfRUxVY6Hg6STGmoD/RW00=,tag:Z382xsamebQJusi8e+gtrw==,type:str]",
+      "subnet": "ENC[AES256_GCM,data:gZdkQunIoMP6RFaD,iv:VKPOO18lXaGGdCrwuWVcp/NYZou/jVH0uJOmL9VjuAY=,tag:EIlpv+6hZqcNSUUvAh6Cvg==,type:str]",
+      "vlan": "ENC[AES256_GCM,data:xZg=,iv:N9ttcbOaTu6XknxY4E5orFfU73z5py1ihrb5HaYvWMw=,tag:z/fnRU2sgbyJLtd25oDJ4w==,type:int]",
+      "dhcp": {
+        "start": "ENC[AES256_GCM,data:EfBBtlX3cVBHOr4=,iv:qCRptM6+n33sDXFNKR80KziLIc8xs/qGJAiva/8UcVE=,tag:5tmL4uvjhFe4jXKahTe1QA==,type:str]",
+        "stop": "ENC[AES256_GCM,data:7ihrqmu/t4hrus4=,iv:UgH63RtSDtsWEqysN1cFcaCcybQ9H/jnR6GpRqxmB34=,tag:+fdc4uzfGMSrh1C2lYv8+w==,type:str]",
+        "dns_enabled": "ENC[AES256_GCM,data:gq17TR0=,iv:v2my8Po5T0tV/NsOXZqejjqoG41vFvPkmyganaz1sA8=,tag:B5cts4+O1R20FLF6X+7mHA==,type:bool]",
+        "dns_servers": [
+          "ENC[AES256_GCM,data:GNrAetrF9L/J,iv:wLUqo94gD+KzQ7L5rumq5TjBAr/zpYL2OaotTOdYIFk=,tag:HmK+fxa1YlpAcNoQxMMFPQ==,type:str]",
+          "ENC[AES256_GCM,data:N8WHH3iy4E14,iv:nA5fSV4E2ci76iDvgF+9AYIj68TRRNUZgUw4rPCRHLM=,tag:vKHuJioWWVlEomvH4phFHg==,type:str]"
+        ]
+      }
+    },
+    "iot": {
+      "id": "ENC[AES256_GCM,data:T634gt52nWo4+8A0+izco/Fbs3izANj4,iv:0mlisjwOmAph5JNCKkMZHfO1N2B8vER9tNhf8GV8SZ4=,tag:ylWAXsgYxYYeajAjkT+d2Q==,type:str]",
+      "name": "ENC[AES256_GCM,data:+lzX78Y=,iv:e8qtbWdYg+dCqu7iCnCrBJvnZGOzFraCGCrb4f1NFng=,tag:24AHGElXzJJxNgV/A/HLbw==,type:str]",
+      "domain_name": "ENC[AES256_GCM,data:WmOdLevrnJhw3YThKRKaqAkqPVNWQrfExA0=,iv:PdAMJ+xXkQU67vREGSJlcW/Kr6Vi5y9J4p+c6XlLvrQ=,tag:Mus0PrNyEhff1cKpKDFv+g==,type:str]",
+      "enabled": "ENC[AES256_GCM,data:NBq+hQ==,iv:kb+y6XwPCzIWJj6k2z5cAf2RkGTfrHoJ73MJ1Udn9rQ=,tag:Q3MLdneSKN86QpSkXvN0yw==,type:bool]",
+      "gateway_type": "ENC[AES256_GCM,data:nFCEbIhSBQ==,iv:AbyCitiAGMFZ9oZ9GFsKpinBsrTI7AX14XcWzNLzkj4=,tag:4XB4BUcKZda/HJM+GhqT3A==,type:str]",
+      "internet_access": "ENC[AES256_GCM,data:nC6RZQ==,iv:gx6KU4tqz9mRmGfHFW3IYb/5R0EoEqROWzDh0bBHHQA=,tag:RqXv5HQaFe0HNQTM2PYp1g==,type:bool]",
+      "multicast_dns": "ENC[AES256_GCM,data:rYh3dg==,iv:qBRwN6LmGqp/nHs0ArhwusRjzk3y8EWS9H5bXLw8QXo=,tag:cgkagywfagIn3okdm1Lxag==,type:bool]",
+      "network_isolation": "ENC[AES256_GCM,data:XLQn+hM=,iv:g8Y5wi2zDa7qf98d8Ks+28kvYLQI0PQ7wI12pfM6wKc=,tag:3rz4qWSkA3NpDZtHzDEO1g==,type:bool]",
+      "purpose": "ENC[AES256_GCM,data:E36Ffz03reoQ,iv:MBNwMWaCh2uhK0B1qnJyxkCj4F81Y4u7oFCdiHdldf4=,tag:pXhWTQ26w6bxJdtf/FEgdQ==,type:str]",
+      "subnet": "ENC[AES256_GCM,data:L8x9DxMPma/Q9h8t,iv:sYE5iw21aOJtZ66akiWf+Mc3x2snZhLrkq24DygoPPs=,tag:CB4ykk9B8y2fOgwU0I3XQQ==,type:str]",
+      "vlan": "ENC[AES256_GCM,data:8mY=,iv:jzujb/sVawsDcr2IqzB9nWI/fmvY1wMmxsLDYkUU6Jg=,tag:W4BrVlscpJZeXiA7Uc5G5Q==,type:int]",
+      "dhcp": {
+        "start": "ENC[AES256_GCM,data:gM9X7yrEc7BYU4Y=,iv:iBjH7hsFbbSORpgUCswMTddE7t57iEQeY5rDMthAg40=,tag:ABa/HLqPqHi3SWBOOzHXdA==,type:str]",
+        "stop": "ENC[AES256_GCM,data:8CNreHXje4wr9IM=,iv:S2B9bv1/ik+LYx9bFb0rfA//fMDafVpuVas7EjX26D8=,tag:OkCwqVBJ2ZHpZJriReP8/w==,type:str]",
+        "dns_enabled": "ENC[AES256_GCM,data:YJzLVQ==,iv:eTMtPF3P49CqJA3DjOCiIz9fREKyH2AdWkshmvmie58=,tag:BBVK2RN6TvPYBNoEGGNbNQ==,type:bool]",
+        "dns_servers": [
+          "ENC[AES256_GCM,data:opt3CcdbSdBR,iv:TDPSYgfltLwvq7pBGP6BmRLOFrbVbtaXNNAKzbL4LzY=,tag:3PxASsxBzwpVPAyt7hXErQ==,type:str]",
+          "ENC[AES256_GCM,data:YXxQfkl5bVLz,iv:z5pX1D7uzwoqEHGy9bf759Vdtb7oeqZYZctPmrg+7xw=,tag:8pa7LH2WipXbFFlpQo1e5A==,type:str]"
+        ]
+      }
+    },
+    "ipcam": {
+      "id": "ENC[AES256_GCM,data:+2p3vIDtzMeHps9daulvOP0ooyVeovu6,iv:SoNJ8w4l8iNMGOP4W7qNt+3G/UxcFM28hVHasV5WTMk=,tag:s0zai8Z4igrA+bg+29WAyw==,type:str]",
+      "name": "ENC[AES256_GCM,data:nDB6t7Hmog==,iv:J37CZcHfqFrHnq51RWWPdnyE9g+mfaks19lNabnxJMQ=,tag:rCuw4YxhdKcg27bZlIZfDA==,type:str]",
+      "domain_name": "ENC[AES256_GCM,data:nf5g0M4ZxLLo/r/7RuGG+RFUgGqyMMlSgGCL4Q==,iv:uw7i7fkdyp0ZmwudRxo/4jwlCLJQZ2SvMu1PeFbX21o=,tag:OHDpUHq16rhfGBdEDPiHpA==,type:str]",
+      "enabled": "ENC[AES256_GCM,data:buPiZQ==,iv:IPTDu9G7jE7yHviZXxhcmjRMdA41k8qpJewqaZxCGeo=,tag:eRdTjUED8KgKlLef+xiCAQ==,type:bool]",
+      "gateway_type": "ENC[AES256_GCM,data:sESyp9nKzA==,iv:GGxx+fcEM0Nj1HucMRuOEWzDzoZxytrikAfc+WfrQEU=,tag:Ugg1Cui6znCfWRFOmWuY2g==,type:str]",
+      "internet_access": "ENC[AES256_GCM,data:A7F6Vw==,iv:n5f6Fj0Lci/zUheA9vYMVqbhGj4yCEDIGCYl84pW5SI=,tag:CuU3PCQivVQrq8iO1A7DqA==,type:bool]",
+      "multicast_dns": "ENC[AES256_GCM,data:e3ih0Ts=,iv:gvoiaxp/lhDXlqzC0meLOwEwpbrU/ltx+hHOukjY+nE=,tag:KSy9LIFSfMUVBvubg73Ufw==,type:bool]",
+      "network_isolation": "ENC[AES256_GCM,data:CIid+p8=,iv:9J8rz3cTENP+l8fGE7ZQ3e49iWHddYV/H5lfl8s2i/8=,tag:VBZLYAcsfMghMsfSLI9F2w==,type:bool]",
+      "purpose": "ENC[AES256_GCM,data:JxpI6RPwsxSs,iv:0TwRmFJkp0/iL7fv065ElMqaoLmkeLG19/+sfMRiKwc=,tag:QpZAAd/L077qSVxgqS0nfg==,type:str]",
+      "subnet": "ENC[AES256_GCM,data:bX23YjIypLEwtCUL,iv:CaLrKSY5sutBRGNtxhPoSZJR4P89LtTJEG1nxt2m7oM=,tag:sTlWfgWi+ZGYeZfXs4qt5A==,type:str]",
+      "vlan": "ENC[AES256_GCM,data:YPI=,iv:1tUpt1aJd4p2b5R2SjSfzBHvj4oM3qqB6jdVV1VMHig=,tag:Y73Fpu1cHs5KV8ZJidm/xA==,type:int]",
+      "dhcp": {
+        "start": "ENC[AES256_GCM,data:maCd4xOdvrn/0uE=,iv:CVhTPUAe6RsM9nOvlGap/8Ip8lbZIIseiqRnmNpr4DY=,tag:PrHxRczr/MDcN/S72VxCKw==,type:str]",
+        "stop": "ENC[AES256_GCM,data:Ld4yEONROsy6UkQ=,iv:bvTAnAvAaUw3p+wbDk6PkGSTg0s2f37+aou2XbEN5oc=,tag:6AF21vZwIffLA75kiXt91g==,type:str]",
+        "dns_enabled": "ENC[AES256_GCM,data:G723FA==,iv:G1QiTlHLoi84gwqW6vM9+1yBOq4YYNmymnaRzgbvj3E=,tag:yQVm6EbdK/E8MepvtQVaIA==,type:bool]",
+        "dns_servers": [
+          "ENC[AES256_GCM,data:ZP1ygpeC3+cI,iv:DKQ05Cpap4YPn9IoDUHQrzk1TDF/fR4GDwx4u0+Pa7E=,tag:We5pEdNslQ9AI62QgWouBg==,type:str]",
+          "ENC[AES256_GCM,data:brLlPOOKfNi6,iv:ab8EMSq/AwT+4BsvzlB60T74jy5ysO2qZZgHkoayuGk=,tag:9HWbKzthXKUoWLnoay674A==,type:str]"
+        ]
+      }
+    },
+    "kids": {
+      "id": "ENC[AES256_GCM,data:4wUyUNZ8PkIwqkWOoh80AFj0XSBIt/bg,iv:x8tb2xeUTDCwiGMqsN+R0hugWeEQLurRu3Gcvwv1Ivw=,tag:jXNHFygoWBlq7FMuN29Ubw==,type:str]",
+      "name": "ENC[AES256_GCM,data:++AU5T/F,iv:7Jok6kHnSVrO3ehsAuyKhwIFvWRkSh3KQUX9Zr4hKeg=,tag:QfwWV/LiL1y8VCpWxwz06g==,type:str]",
+      "domain_name": "ENC[AES256_GCM,data:uq4u5Txondly0NMAXQfJ8TZBUas2fG3TPXCu,iv:BFWaLuhCjCQ2tqOAJWgfqQ2TvZC8BGwwms5pZdKP/Ls=,tag:NiZWsOIUfIu3ST0rGSprzg==,type:str]",
+      "enabled": "ENC[AES256_GCM,data:Ah+95Q==,iv:ysW0RVyX5c3mQmpkO6P40Whm1H/ZxDlA/23q8WUvBCU=,tag:7pDc0+TDDtuE3ybvoRKCkg==,type:bool]",
+      "gateway_type": "ENC[AES256_GCM,data:li1zwR+RIQ==,iv:lhgPXLpuci9RtugLG0phgyrE4TMt40fxJV005yFCO+s=,tag:d+WuPDFTanVkt6qiNZyaOg==,type:str]",
+      "internet_access": "ENC[AES256_GCM,data:k18LzA==,iv:onHAulMJ3j56cuyL7w1MfE86AMcSKcu+Iyr+1XTajJs=,tag:7aHnq5mP1uCD0gRF/PmQKQ==,type:bool]",
+      "multicast_dns": "ENC[AES256_GCM,data:wyrDuFA=,iv:iEGPo+HakuohvQnyBfJAQFgJw9AuhjoQuDEG0VSdkxg=,tag:WL0+Q8WoCdHaF2hYO77yYg==,type:bool]",
+      "network_isolation": "ENC[AES256_GCM,data:CaCCMBw=,iv:fSJDy+kk3HZ1uVnnuEIxxG3ovClFkzlee82OBRfYw+Y=,tag:4CE6JqxQx9MdG5ErrBNdhg==,type:bool]",
+      "purpose": "ENC[AES256_GCM,data:9boAeJ+JBPoj,iv:pReWM9KlnEyznj+QRxu/WSvdIZ446ftAJPmWLjwy3Uw=,tag:+dmchyOKdndiGPw+cRlsCg==,type:str]",
+      "subnet": "ENC[AES256_GCM,data:fcq9p6w/vdXOrjcE,iv:HdVBYwmzdlh/saRnh0jnpgBKR8iE5tIpfNzQMs0ySy0=,tag:GYNUOz/tLw7zdsHM8lnVQg==,type:str]",
+      "vlan": "ENC[AES256_GCM,data:wu4=,iv:qbyo5KaiuljrUC/AAsexPxuXSPTx+KJ3GaP9xlAejxI=,tag:MiVBmU/OLEmbKJGwWSSHow==,type:int]",
+      "dhcp": {
+        "start": "ENC[AES256_GCM,data:5H2YYBrWjgcaEqw=,iv:BZj7okXqV0zQkgKusOj7S23NsNXWEC7WOM7HtXH5/x0=,tag:MgiQq/mPITN+AWbuETkWpQ==,type:str]",
+        "stop": "ENC[AES256_GCM,data:i6CouY5QMGNnyc0=,iv:AAX3Pq+0W84R4nVHw7xpwQ1kQqB71QnG/EReuOf5lnA=,tag:pjYbr4xHtgBa4uYM9mcJWQ==,type:str]",
+        "dns_enabled": "ENC[AES256_GCM,data:LoR+rg==,iv:jFyKoH52Pmfzf9c+nl1bJ9pqagT3inHY73eU8aq+z10=,tag:ZiBr/wj0DlXJK71gu1W6Ew==,type:bool]",
+        "dns_servers": [
+          "ENC[AES256_GCM,data:bXVjd1lOH8V5,iv:GwAk04eIAKsXw8Rig29VUofd8FhEXsSR2CVc7Rrj5j0=,tag:ziGZ7OSXh+5QcDKHXvjnBg==,type:str]",
+          "ENC[AES256_GCM,data:Ay5r3LhGjISF,iv:mYeOvQHGh2bbiP1WXFp6OLysircEc1skxRX6KRDMDgQ=,tag:M/7dl1FFd697XTNmJpEPog==,type:str]"
+        ]
+      }
+    },
+    "guest": {
+      "id": "ENC[AES256_GCM,data:I+3Wsr+EYFoAzQiBvzk/bT17rE2ZJL/e,iv:xW0Qhz+LZbKaG2rP5Ckyy/KwgHuFF+Wb4rgcf7FNicg=,tag:oXh+RDnPUD/jXISF58W0hA==,type:str]",
+      "name": "ENC[AES256_GCM,data:UFHR1cseVXU=,iv:Zdc8pPfLA897bIYmF7YlGZBWTXtUhDTHxJQCZWl3DAU=,tag:xi+NiJ1yrQVjpMinq7SkBA==,type:str]",
+      "domain_name": "ENC[AES256_GCM,data:ftuNBFfzHuTIBjH8oU9JY/q8d2ew8vojowYLag==,iv:uKOw/XAIHu4ILGEEjlaN2yQyxcy4HNZZi4JE+97qVHA=,tag:n/oFqM1HkRhPFur8Y9uhZw==,type:str]",
+      "enabled": "ENC[AES256_GCM,data:TO+qQg==,iv:VPW0FIxgYWdRZ1cNtkj+X/lhf9WkplgloKS+N+GP3Ec=,tag:obfEJR/NKIXF5ogCQVL+zA==,type:bool]",
+      "gateway_type": "ENC[AES256_GCM,data:H8wgAuwHZA==,iv:LyxFVCNLxyHPH213a21BMLlug0OQ4RY1dmfoCt7GIms=,tag:V8hIUqUnQJkwblLPz2bW5w==,type:str]",
+      "internet_access": "ENC[AES256_GCM,data:P7mO6Q==,iv:lE3bZokDrcSgvAd6EY535fO7yRugqVD3+3HC+pkoPas=,tag:DO3Xp86FmszzsrzMLzhGWw==,type:bool]",
+      "multicast_dns": "ENC[AES256_GCM,data:BvZliME=,iv:T3d9Y3OjQdZRWoQHks33lr7npsTlSYSu2HcpQoN1lQA=,tag:d1CjYIuQ8651DSlwVPndoA==,type:bool]",
+      "network_isolation": "ENC[AES256_GCM,data:M/1abKk=,iv:bJGMO2w7kbgp4JpSjoTEiAaWoenM/CAAbYknIVgjREM=,tag:iIGY7Zn8zenkZyvQ8QJO2A==,type:bool]",
+      "purpose": "ENC[AES256_GCM,data:2hKf1rU=,iv:zHGYljrlekDogtmsU1qnewGcX9WiIz70i+HNBsgh9CY=,tag:kwvpB4Etoui2UiWuRxMReg==,type:str]",
+      "subnet": "ENC[AES256_GCM,data:g0SgaavRexy1JsCpcg==,iv:tAl8tQ10t3nIPy1QCkF8DbGHHrxjd0USdqMYmNkztIk=,tag:gg6nfiECflzrRV5HfUVUEg==,type:str]",
+      "vlan": "ENC[AES256_GCM,data:hFy7,iv:FNKRRP/K67N6YxJPNn1qg+jEK0WdtisEHCr5jEPTDOc=,tag:4bsX7/BdhW/8CdzuU0/jaA==,type:int]",
+      "dhcp": {
+        "start": "ENC[AES256_GCM,data:Ek33pouA0aWP5z30,iv:LrHLIOedGortGvtycn7klC2nIIkmYUMXkyA1gWNwmM4=,tag:uQmJnvld1R+VzUwWHv1fXw==,type:str]",
+        "stop": "ENC[AES256_GCM,data:d9dTlECAEAJPpyUf,iv:ZQKLZPdLMlSqULE1/qgridgklFOHyZbJzUS9iWHdr88=,tag:529iufcDAaUoQtm7Xqdh4A==,type:str]",
+        "dns_enabled": "ENC[AES256_GCM,data:wtp1gg==,iv:6UZ3/tOojWDO78GVBAp/orVVr8VzG9DQkxpJLF51TLc=,tag:FB9xQyFnRa1lpZjkqCv+Jw==,type:bool]",
+        "dns_servers": [
+          "ENC[AES256_GCM,data:zQpqUiKpa2+8,iv:zykfu5MURChHq/90P67e/y4q66iPz42RihrtIqx5Szo=,tag:4A51zNKF/r4SztKus7VGkA==,type:str]",
+          "ENC[AES256_GCM,data:HM9xLf6dSJm7,iv:9F1ASyXHp/ovgpgJSPN/yz9m03fUYQaYYZY8joBaL48=,tag:p76d4CUHyifYHQdxy6PVrA==,type:str]"
+        ]
+      }
+    }
+  },
+  "sops": {
+    "age": [
+      {
+        "enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBlSVR2dk1HSHdTR051SDRZ\nNjdXM29xczRHTG9peENBbVNheHBmTG9EZm1zCkRoZjM2Z0JXS3UyZjJCenZFb2NY\nL3h4Mk1qTHdiNStVRVEzL2I3K21lMXMKLS0tIEM2d0pDNlYzVEt2V1UzODMrcnRr\nUzVrTGFMb2JuODMzUnhHQ1pBWjd6QlUKRt36WwyMjtWTuPcJrRtKprjBklsP8NnU\n/Tv5WqMUpEz9hWKb7H+FmLQNL7Lbzf7/lBFX1kza5J+HC7YuWFmz/Q==\n-----END AGE ENCRYPTED FILE-----\n",
+        "recipient": "age1s90xwvtqw9at892s8tyde9lp8vu3rs2lde7pwh7hayuc2sahmv6qmkwpff"
+      }
+    ],
+    "lastmodified": "2026-10-10T02:44:41Z",
+    "mac": "ENC[AES256_GCM,data:Sa4f5Q4g0kBmNq5PtmByQ/LlEoYPbCLgutw5wUqZV332Bxy7QLlprjuH1bcUrfQNrHghL2jlNzM2l7czRPr+uQge1pHSQpR4Fa0pMS4OQWhqOd/9uTwKvavpiRqsransO4oz1DmrM/2MuyH4Z7DXZUuXNy4IpcnYNOpQ1WAD/ig=,iv:Tf8Bn3dr6tPfsQ3HLyXm+3bg6OR77SRLxL/J4fy1Sgk=,tag:t/roDkUke2fZH8YVRZRUvw==,type:str]",
+    "unencrypted_suffix": "_unencrypted",
+    "version": "3.13.3"
+  }
+}
