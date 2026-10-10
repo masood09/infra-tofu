@@ -27,6 +27,8 @@ UNIFI_WLANS_PLAIN := UNIFI_DIR + "/wlans.auto.tfvars.json"
 UNIFI_WLANS_ENC   := UNIFI_DIR + "/wlans.auto.tfvars.json.enc"
 UNIFI_DNS_PLAIN := UNIFI_DIR + "/dns.auto.tfvars.json"
 UNIFI_DNS_ENC   := UNIFI_DIR + "/dns.auto.tfvars.json.enc"
+UNIFI_FIXED_IPS_PLAIN := UNIFI_DIR + "/fixed_ips.auto.tfvars.json"
+UNIFI_FIXED_IPS_ENC   := UNIFI_DIR + "/fixed_ips.auto.tfvars.json.enc"
 
 # -----------------------------
 # Helpers
@@ -69,6 +71,11 @@ encrypt-unifi-dns: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{UNIFI_DNS_PLAIN}} -> {{UNIFI_DNS_ENC}} (JSON)"
 	{{SOPS}} -e --output {{UNIFI_DNS_ENC}} {{UNIFI_DNS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_DNS_ENC}}"
+
+encrypt-unifi-fixed-ips: _check-tools _check-dirs
+	@echo "🔐 Encrypting {{UNIFI_FIXED_IPS_PLAIN}} -> {{UNIFI_FIXED_IPS_ENC}} (JSON)"
+	{{SOPS}} -e --output {{UNIFI_FIXED_IPS_ENC}} {{UNIFI_FIXED_IPS_PLAIN}}
+	@echo "✅ Wrote {{UNIFI_FIXED_IPS_ENC}}"
 
 encrypt: encrypt-oci encrypt-ak-prod encrypt-ak-test
 	@echo "✅ Encrypted all"
@@ -118,6 +125,12 @@ decrypt-unifi-dns: _check-tools _check-dirs
 	@echo "✅ Wrote {{UNIFI_DNS_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{UNIFI_DNS_PLAIN}}"
 
+decrypt-unifi-fixed-ips: _check-tools _check-dirs
+	@echo "🔓 Decrypting {{UNIFI_FIXED_IPS_ENC}} -> {{UNIFI_FIXED_IPS_PLAIN}} (JSON)"
+	{{SOPS}} -d --output-type json {{UNIFI_FIXED_IPS_ENC}} > {{UNIFI_FIXED_IPS_PLAIN}}
+	@echo "✅ Wrote {{UNIFI_FIXED_IPS_PLAIN}}"
+	@echo "⚠️  Do NOT commit {{UNIFI_FIXED_IPS_PLAIN}}"
+
 decrypt: decrypt-oci decrypt-ak-prod decrypt-ak-test
 	@echo "✅ Decrypted all"
 
@@ -157,6 +170,11 @@ clean-unifi-wlans:
 clean-unifi-dns:
 	@echo "🧹 Removing {{UNIFI_DNS_PLAIN}}"
 	rm -f {{UNIFI_DNS_PLAIN}}
+	@echo "✅ Clean"
+
+clean-unifi-fixed-ips:
+	@echo "🧹 Removing {{UNIFI_FIXED_IPS_PLAIN}}"
+	rm -f {{UNIFI_FIXED_IPS_PLAIN}}
 	@echo "✅ Clean"
 
 clean: clean-oci clean-ak-prod clean-ak-test clean-unifi
@@ -202,13 +220,13 @@ inventory-unifi-dns: decrypt-unifi
 	bash scripts/unifi-dns-inventory.sh {{UNIFI_PLAIN}}
 	just clean-unifi
 
-plan-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns
+plan-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns decrypt-unifi-fixed-ips
 	cd {{UNIFI_DIR}} && tofu plan -input=false
-	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns
+	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns clean-unifi-fixed-ips
 
-apply-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns
+apply-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns decrypt-unifi-fixed-ips
 	cd {{UNIFI_DIR}} && tofu init -upgrade -input=false && tofu apply
-	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns
+	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns clean-unifi-fixed-ips
 
 
 # -----------------------------
