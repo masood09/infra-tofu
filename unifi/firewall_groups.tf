@@ -11,7 +11,10 @@ resource "unifi_firewall_group" "managed" {
 }
 
 import {
-  for_each = var.unifi_firewall_groups
+  for_each = {
+    for key, group in var.unifi_firewall_groups : key => group
+    if try(group.id, null) != null
+  }
   to       = unifi_firewall_group.managed[each.key]
   id       = each.value.id
 }

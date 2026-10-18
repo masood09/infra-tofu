@@ -33,7 +33,10 @@ resource "unifi_firewall_policy" "managed" {
 }
 
 import {
-  for_each = var.unifi_firewall_policies
+  for_each = {
+    for key, policy in var.unifi_firewall_policies : key => policy
+    if try(policy.id, null) != null
+  }
   to       = unifi_firewall_policy.managed[each.key]
   id       = each.value.id
 }
