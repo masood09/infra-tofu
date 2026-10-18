@@ -3,10 +3,6 @@ resource "unifi_client" "fixed_ip" {
 
   mac      = each.value.mac
   fixed_ip = each.value.fixed_ip
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 import {
