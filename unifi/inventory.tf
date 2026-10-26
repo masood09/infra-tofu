@@ -7,12 +7,13 @@ data "unifi_client_list" "all" {
 locals {
   known_clients = [
     for client in data.unifi_client_list.all.clients : {
-      mac      = client.mac
-      name     = client.name
-      hostname = client.hostname
-      fixed_ip = client.fixed_ip
-      vendor   = client.oui
-      blocked  = client.blocked
+      mac              = client.mac
+      name             = client.name
+      hostname         = client.hostname
+      fixed_ip         = client.fixed_ip
+      local_dns_record = client.local_dns_record
+      vendor           = client.oui
+      blocked          = client.blocked
     }
   ]
 }
