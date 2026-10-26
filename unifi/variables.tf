@@ -98,9 +98,10 @@ variable "unifi_dns_records" {
 variable "unifi_fixed_ips" {
   description = "UniFi client fixed-IP assignments loaded from the encrypted tfvars file."
   type = map(object({
-    id        = string
-    mac       = string
-    fixed_ip  = string
+    id               = string
+    mac              = string
+    fixed_ip         = string
+    local_dns_record = optional(string)
   }))
 }
 
