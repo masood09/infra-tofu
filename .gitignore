@@ -57,6 +57,10 @@ terraform.rc
 
 # Keep the UniFi provider lock file under version control.
 !unifi/.terraform.lock.hcl
+# Keep infrastructure provider lock files under version control.
+!oci/.terraform.lock.hcl
+!authentik/envs/prod/.terraform.lock.hcl
+!authentik/envs/test/.terraform.lock.hcl
 
 credentials.auto.tfvars
 sensitive.auto.tfvars
