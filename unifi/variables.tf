@@ -31,7 +31,6 @@ variable "unifi_allow_insecure" {
 variable "unifi_networks" {
   description = "UniFi network definitions loaded from the encrypted network tfvars file."
   type = map(object({
-    id                = string
     name              = string
     domain_name       = string
     enabled           = bool
@@ -54,11 +53,10 @@ variable "unifi_networks" {
 variable "unifi_wlans" {
   description = "UniFi WLAN definitions loaded from the encrypted WLAN tfvars file."
   type = map(object({
-    id                  = string
     name                = string
     enabled             = bool
     security            = string
-    network_id          = string
+    network_key         = string
     user_group_id       = string
     wlan_bands          = set(string)
     is_guest            = bool
@@ -83,7 +81,6 @@ variable "unifi_wlans" {
 variable "unifi_dns_records" {
   description = "UniFi local DNS records loaded from the encrypted DNS tfvars file."
   type = map(object({
-    id          = string
     name        = string
     enabled     = bool
     record_type = string
@@ -98,7 +95,6 @@ variable "unifi_dns_records" {
 variable "unifi_fixed_ips" {
   description = "UniFi client fixed-IP assignments loaded from the encrypted tfvars file."
   type = map(object({
-    id               = string
     mac              = string
     fixed_ip         = string
     local_dns_record = optional(string)
@@ -118,4 +114,24 @@ variable "unifi_firewall_groups" {
 variable "unifi_firewall_policies" {
   description = "User-created UniFi firewall policies loaded from encrypted configuration."
   type        = any
+}
+
+variable "unifi_import_ids" {
+  description = "Generated controller IDs used only to bootstrap imports."
+  type = object({
+    networks          = map(string)
+    wlans             = map(string)
+    dns_records       = map(string)
+    firewall_zones    = map(string)
+    firewall_groups   = map(string)
+    firewall_policies = map(string)
+  })
+  default = {
+    networks          = {}
+    wlans             = {}
+    dns_records       = {}
+    firewall_zones    = {}
+    firewall_groups   = {}
+    firewall_policies = {}
+  }
 }

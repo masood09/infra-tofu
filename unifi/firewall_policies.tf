@@ -31,12 +31,3 @@ resource "unifi_firewall_policy" "managed" {
     prevent_destroy = true
   }
 }
-
-import {
-  for_each = {
-    for key, policy in var.unifi_firewall_policies : key => policy
-    if try(policy.id, null) != null
-  }
-  to       = unifi_firewall_policy.managed[each.key]
-  id       = each.value.id
-}

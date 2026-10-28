@@ -20,9 +20,3 @@ resource "unifi_dns_record" "managed" {
     ]
   }
 }
-
-import {
-  for_each = var.unifi_dns_records
-  to       = unifi_dns_record.managed[each.key]
-  id       = each.value.id
-}

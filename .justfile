@@ -31,6 +31,8 @@ UNIFI_FIXED_IPS_PLAIN := UNIFI_DIR + "/fixed_ips.auto.tfvars.json"
 UNIFI_FIXED_IPS_ENC   := UNIFI_DIR + "/fixed_ips.auto.tfvars.json.enc"
 UNIFI_FIREWALL_PLAIN := UNIFI_DIR + "/firewall.auto.tfvars.json"
 UNIFI_FIREWALL_ENC   := UNIFI_DIR + "/firewall.auto.tfvars.json.enc"
+UNIFI_IMPORT_IDS_PLAIN := UNIFI_DIR + "/import_ids.auto.tfvars.json"
+UNIFI_IMPORT_IDS_ENC   := UNIFI_DIR + "/import_ids.auto.tfvars.json.enc"
 
 # -----------------------------
 # Helpers
@@ -83,6 +85,11 @@ encrypt-unifi-firewall: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{UNIFI_FIREWALL_PLAIN}} -> {{UNIFI_FIREWALL_ENC}} (JSON)"
 	{{SOPS}} -e --output {{UNIFI_FIREWALL_ENC}} {{UNIFI_FIREWALL_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_FIREWALL_ENC}}"
+
+encrypt-unifi-import-ids: _check-tools _check-dirs
+	@echo "🔐 Encrypting {{UNIFI_IMPORT_IDS_PLAIN}} -> {{UNIFI_IMPORT_IDS_ENC}} (JSON)"
+	{{SOPS}} -e --output {{UNIFI_IMPORT_IDS_ENC}} {{UNIFI_IMPORT_IDS_PLAIN}}
+	@echo "✅ Wrote {{UNIFI_IMPORT_IDS_ENC}}"
 
 encrypt: encrypt-oci encrypt-ak-prod encrypt-ak-test
 	@echo "✅ Encrypted all"
@@ -144,6 +151,11 @@ decrypt-unifi-firewall: _check-tools _check-dirs
 	@echo "✅ Wrote {{UNIFI_FIREWALL_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{UNIFI_FIREWALL_PLAIN}}"
 
+decrypt-unifi-import-ids: _check-tools _check-dirs
+	@echo "🔓 Decrypting {{UNIFI_IMPORT_IDS_ENC}} -> {{UNIFI_IMPORT_IDS_PLAIN}} (JSON)"
+	{{SOPS}} -d --output-type json {{UNIFI_IMPORT_IDS_ENC}} > {{UNIFI_IMPORT_IDS_PLAIN}}
+	@echo "⚠️  Do NOT commit {{UNIFI_IMPORT_IDS_PLAIN}}"
+
 decrypt: decrypt-oci decrypt-ak-prod decrypt-ak-test
 	@echo "✅ Decrypted all"
 
@@ -193,6 +205,11 @@ clean-unifi-fixed-ips:
 clean-unifi-firewall:
 	@echo "🧹 Removing {{UNIFI_FIREWALL_PLAIN}}"
 	rm -f {{UNIFI_FIREWALL_PLAIN}}
+	@echo "✅ Clean"
+
+clean-unifi-import-ids:
+	@echo "🧹 Removing {{UNIFI_IMPORT_IDS_PLAIN}}"
+	rm -f {{UNIFI_IMPORT_IDS_PLAIN}}
 	@echo "✅ Clean"
 
 clean: clean-oci clean-ak-prod clean-ak-test clean-unifi
@@ -247,13 +264,13 @@ capture-unifi-firewall: decrypt-unifi
 	just encrypt-unifi-firewall
 	just clean-unifi clean-unifi-firewall
 
-plan-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns decrypt-unifi-fixed-ips decrypt-unifi-firewall
+plan-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns decrypt-unifi-fixed-ips decrypt-unifi-firewall decrypt-unifi-import-ids
 	cd {{UNIFI_DIR}} && tofu plan -input=false
-	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns clean-unifi-fixed-ips clean-unifi-firewall
+	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns clean-unifi-fixed-ips clean-unifi-firewall clean-unifi-import-ids
 
-apply-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns decrypt-unifi-fixed-ips decrypt-unifi-firewall
+apply-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns decrypt-unifi-fixed-ips decrypt-unifi-firewall decrypt-unifi-import-ids
 	cd {{UNIFI_DIR}} && tofu init -upgrade -input=false && tofu apply
-	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns clean-unifi-fixed-ips clean-unifi-firewall
+	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns clean-unifi-fixed-ips clean-unifi-firewall clean-unifi-import-ids
 
 
 # -----------------------------
