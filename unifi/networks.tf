@@ -38,9 +38,3 @@ resource "unifi_network" "managed" {
     prevent_destroy = true
   }
 }
-
-import {
-  for_each = var.unifi_networks
-  to       = unifi_network.managed[each.key]
-  id       = each.value.id
-}

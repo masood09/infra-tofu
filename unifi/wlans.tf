@@ -4,7 +4,7 @@ resource "unifi_wlan" "managed" {
   name              = each.value.name
   enabled           = each.value.enabled
   security          = each.value.security
-  network_id        = each.value.network_id
+  network_id        = unifi_network.managed[each.value.network_key].id
   user_group_id     = each.value.user_group_id
   wlan_bands        = each.value.wlan_bands
   is_guest          = each.value.is_guest
@@ -22,10 +22,4 @@ resource "unifi_wlan" "managed" {
       ap_group,
     ]
   }
-}
-
-import {
-  for_each = var.unifi_wlans
-  to       = unifi_wlan.managed[each.key]
-  id       = each.value.id
 }

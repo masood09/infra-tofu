@@ -10,9 +10,3 @@ resource "unifi_firewall_zone" "managed" {
     prevent_destroy = true
   }
 }
-
-import {
-  for_each = var.unifi_firewall_zones
-  to       = unifi_firewall_zone.managed[each.key]
-  id       = each.value.id
-}
