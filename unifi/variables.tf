@@ -85,10 +85,10 @@ variable "unifi_dns_records" {
     enabled     = bool
     record_type = string
     value       = string
-    port        = number
-    priority    = number
-    ttl         = string
-    weight      = number
+    port        = optional(number)
+    priority    = optional(number)
+    ttl         = optional(string)
+    weight      = optional(number)
   }))
 }
 

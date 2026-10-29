@@ -11,7 +11,10 @@ import {
 }
 
 import {
-  for_each = var.unifi_dns_records
+  for_each = {
+    for key, record in var.unifi_dns_records : key => record
+    if try(var.unifi_import_ids.dns_records[key], null) != null
+  }
   to       = unifi_dns_record.managed[each.key]
   id       = var.unifi_import_ids.dns_records[each.key]
 }
