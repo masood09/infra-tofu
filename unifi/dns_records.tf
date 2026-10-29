@@ -5,13 +5,12 @@ resource "unifi_dns_record" "managed" {
   enabled     = each.value.enabled
   record_type = each.value.record_type
   value       = each.value.value
-  port        = each.value.port
-  priority    = each.value.priority
-  ttl         = each.value.ttl
-  weight      = each.value.weight
+  port        = try(each.value.port, null)
+  priority    = try(each.value.priority, null)
+  ttl         = try(each.value.ttl, null)
+  weight      = try(each.value.weight, null)
 
   lifecycle {
-    prevent_destroy = true
     ignore_changes = [
       port,
       priority,
