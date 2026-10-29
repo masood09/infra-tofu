@@ -1,8 +1,8 @@
-# UniFi inventory
+# UniFi OpenTofu configuration
 
-This root is the read-only bootstrap for bringing the UniFi Network controller
-under OpenTofu management. It currently declares data sources only and does not
-create or update UniFi configuration.
+This root manages selected UniFi Network configuration and imports existing
+controller objects before making them declarative. Networks, WLANs, firewall
+objects, DNS records, and fixed client IPs are supported.
 
 ## Credentials
 
@@ -24,6 +24,5 @@ The encrypted file is the only credentials file that should be committed.
 just discover-unifi
 ```
 
-The command initializes the provider, refreshes read-only client data, and
-prints the inventory outputs as JSON. Later management resources should be
-added incrementally and imported from the existing controller configuration.
+The command initializes the provider, refreshes client and network inventory,
+and prints the inventory outputs as JSON.
