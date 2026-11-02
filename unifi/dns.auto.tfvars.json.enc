@@ -549,6 +549,12 @@
       "priority": "ENC[AES256_GCM,data:0Q==,iv:IoDQQN1UQLckdZg1GjzvIqCMzRIGPY9Xi7Z7gEQZVes=,tag:VpPWFsH7DVMuYZURthrTKg==,type:int]",
       "ttl": "ENC[AES256_GCM,data:TaQ=,iv:0lgn89zseK6llWprH7RfhlP5b1t5B8PN5/B93AiSLsc=,tag:QT23VSs0HyHEqCmji66B+Q==,type:str]",
       "weight": "ENC[AES256_GCM,data:4A==,iv:Ia2HIpe5s1jpUvgGpd7PGZQLztqmXmuD3I2xjnFo8rQ=,tag:9k2jDHy9Hs8cX1UnXNMOTA==,type:int]"
+    },
+    "boot.ixian.home.mantannest.com": {
+      "enabled": "ENC[AES256_GCM,data:w9rBvQ==,iv:ceONNNQtTYe8etDmbYD9Tn6FMZ9bnyKBRBRMcll86qw=,tag:Sy8UZzta5KvJV1ljug+JCg==,type:bool]",
+      "name": "ENC[AES256_GCM,data:g72l9YHS3FeOjcr3S7Ab1YAhURx5fxlfCe0d3Mbb,iv:XDirAc9FEtxHIlgKs+azcVRewFbRmhBpQ/82h6+jTos=,tag:c4yjAOWddZrUkSJNkdXeUQ==,type:str]",
+      "record_type": "ENC[AES256_GCM,data:PLRBufM=,iv:MeOa2DoV7uNQBSL/gedUGRmu6L98gMqrST0/2Q264Pg=,tag:zTbziqPWeZkmNihgAvl6wg==,type:str]",
+      "value": "ENC[AES256_GCM,data:JkcWwSjgYFR83Mmji3UAw0aOp5bH7VUW5w==,iv:1pFDu4YQyxAjfQJpfthyslyezJto5U3Z64UfBinEAuI=,tag:az7cweEK2biHVdAWVQKGDQ==,type:str]"
     }
   },
   "sops": {
@@ -558,8 +564,8 @@
         "recipient": "age1s90xwvtqw9at892s8tyde9lp8vu3rs2lde7pwh7hayuc2sahmv6qmkwpff"
       }
     ],
-    "lastmodified": "2026-10-29T14:22:12Z",
-    "mac": "ENC[AES256_GCM,data:5Z50AmFelfcfSDuPC7L+rYvad+vSI1eLM1tQ9tJlEHcUyKGgZERkaDdUF9pAuk+aR4fjrorURnhHXU2Xc42UqMcPOMxolwwhdviA4EOa5zeARA4KMA3kEN3DpHIyG2RaoTZMRXQMDxSMHmqCcwMdanjLKIkSnFRwMPpaqe/1bTs=,iv:RLygWLij3onukwhjt0zt8QvcrVrJiGOqszUbaz7y4gA=,tag:prKUfz/qz2xHbJCebROKmA==,type:str]",
+    "lastmodified": "2026-11-02T16:38:55Z",
+    "mac": "ENC[AES256_GCM,data:gITrPGqakN6D02AgvFWpL8awpBo6cNb6dkXdb28nekjIvCmDt52SvtqRmMkzZZ/UficAekO1a4l/VV3Pnn7yfn8EGsz+jCb+rC+BsUuMlPNkOaNpYvIfVnkFeMZMmaFqy1PxIDnmBTKXjfOev4QZNPM/7HuBBRkAq9AKfgzhXYc=,iv:HLY8Z27YGCehkNfEQF4xkyHhGpZt+NFsk3lcRxoSADo=,tag:lhEcrjl1KojEEbgnH2Zjuw==,type:str]",
     "unencrypted_suffix": "_unencrypted",
     "version": "3.13.3"
   }
