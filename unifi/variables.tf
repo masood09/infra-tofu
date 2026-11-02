@@ -61,7 +61,7 @@ variable "unifi_wlans" {
     wlan_bands          = set(string)
     is_guest            = bool
     l2_isolation        = bool
-    hide_ssid           = bool
+    hide_ssid            = bool
     wpa                 = optional(object({
       mode = optional(string)
       enc  = optional(string)
@@ -96,6 +96,7 @@ variable "unifi_fixed_ips" {
   description = "UniFi client fixed-IP assignments loaded from the encrypted tfvars file."
   type = map(object({
     mac              = string
+    name             = optional(string)
     fixed_ip         = string
     local_dns_record = optional(string)
   }))
