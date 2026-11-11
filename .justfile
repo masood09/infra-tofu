@@ -4,6 +4,8 @@ set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 # Config
 # -----------------------------
 SOPS := "sops"
+# Binary mode encrypts the whole file, so JSON object keys (MAC addresses and
+# other map keys) are encrypted too. JSON mode only encrypts values.
 INPUT_TYPE := "binary"
 OUTPUT_TYPE := "binary"
 
@@ -67,28 +69,28 @@ encrypt-unifi: _check-tools _check-dirs
 	@echo "✅ Wrote {{UNIFI_ENC}}"
 
 encrypt-unifi-wlans: _check-tools _check-dirs
-	@echo "🔐 Encrypting {{UNIFI_WLANS_PLAIN}} -> {{UNIFI_WLANS_ENC}} (JSON)"
-	{{SOPS}} -e --output {{UNIFI_WLANS_ENC}} {{UNIFI_WLANS_PLAIN}}
+	@echo "🔐 Encrypting {{UNIFI_WLANS_PLAIN}} -> {{UNIFI_WLANS_ENC}} (binary)"
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_WLANS_ENC}} {{UNIFI_WLANS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_WLANS_ENC}}"
 
 encrypt-unifi-dns: _check-tools _check-dirs
-	@echo "🔐 Encrypting {{UNIFI_DNS_PLAIN}} -> {{UNIFI_DNS_ENC}} (JSON)"
-	{{SOPS}} -e --output {{UNIFI_DNS_ENC}} {{UNIFI_DNS_PLAIN}}
+	@echo "🔐 Encrypting {{UNIFI_DNS_PLAIN}} -> {{UNIFI_DNS_ENC}} (binary)"
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_DNS_ENC}} {{UNIFI_DNS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_DNS_ENC}}"
 
 encrypt-unifi-fixed-ips: _check-tools _check-dirs
-	@echo "🔐 Encrypting {{UNIFI_FIXED_IPS_PLAIN}} -> {{UNIFI_FIXED_IPS_ENC}} (JSON)"
-	{{SOPS}} -e --output {{UNIFI_FIXED_IPS_ENC}} {{UNIFI_FIXED_IPS_PLAIN}}
+	@echo "🔐 Encrypting {{UNIFI_FIXED_IPS_PLAIN}} -> {{UNIFI_FIXED_IPS_ENC}} (binary)"
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_FIXED_IPS_ENC}} {{UNIFI_FIXED_IPS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_FIXED_IPS_ENC}}"
 
 encrypt-unifi-firewall: _check-tools _check-dirs
-	@echo "🔐 Encrypting {{UNIFI_FIREWALL_PLAIN}} -> {{UNIFI_FIREWALL_ENC}} (JSON)"
-	{{SOPS}} -e --output {{UNIFI_FIREWALL_ENC}} {{UNIFI_FIREWALL_PLAIN}}
+	@echo "🔐 Encrypting {{UNIFI_FIREWALL_PLAIN}} -> {{UNIFI_FIREWALL_ENC}} (binary)"
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_FIREWALL_ENC}} {{UNIFI_FIREWALL_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_FIREWALL_ENC}}"
 
 encrypt-unifi-import-ids: _check-tools _check-dirs
-	@echo "🔐 Encrypting {{UNIFI_IMPORT_IDS_PLAIN}} -> {{UNIFI_IMPORT_IDS_ENC}} (JSON)"
-	{{SOPS}} -e --output {{UNIFI_IMPORT_IDS_ENC}} {{UNIFI_IMPORT_IDS_PLAIN}}
+	@echo "🔐 Encrypting {{UNIFI_IMPORT_IDS_PLAIN}} -> {{UNIFI_IMPORT_IDS_ENC}} (binary)"
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_IMPORT_IDS_ENC}} {{UNIFI_IMPORT_IDS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_IMPORT_IDS_ENC}}"
 
 encrypt: encrypt-oci encrypt-ak-prod encrypt-ak-test
@@ -122,38 +124,38 @@ decrypt-unifi: _check-tools _check-dirs
 	@echo "⚠️  Do NOT commit {{UNIFI_PLAIN}}"
 
 decrypt-unifi-networks: _check-tools _check-dirs
-	@echo "🔓 Decrypting {{UNIFI_NETWORKS_ENC}} -> {{UNIFI_NETWORKS_PLAIN}} (JSON)"
-	{{SOPS}} -d --output-type json {{UNIFI_NETWORKS_ENC}} > {{UNIFI_NETWORKS_PLAIN}}
+	@echo "🔓 Decrypting {{UNIFI_NETWORKS_ENC}} -> {{UNIFI_NETWORKS_PLAIN}} (binary)"
+	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_NETWORKS_ENC}} > {{UNIFI_NETWORKS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_NETWORKS_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{UNIFI_NETWORKS_PLAIN}}"
 
 decrypt-unifi-wlans: _check-tools _check-dirs
-	@echo "🔓 Decrypting {{UNIFI_WLANS_ENC}} -> {{UNIFI_WLANS_PLAIN}} (JSON)"
-	{{SOPS}} -d --output-type json {{UNIFI_WLANS_ENC}} > {{UNIFI_WLANS_PLAIN}}
+	@echo "🔓 Decrypting {{UNIFI_WLANS_ENC}} -> {{UNIFI_WLANS_PLAIN}} (binary)"
+	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_WLANS_ENC}} > {{UNIFI_WLANS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_WLANS_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{UNIFI_WLANS_PLAIN}}"
 
 decrypt-unifi-dns: _check-tools _check-dirs
-	@echo "🔓 Decrypting {{UNIFI_DNS_ENC}} -> {{UNIFI_DNS_PLAIN}} (JSON)"
-	{{SOPS}} -d --output-type json {{UNIFI_DNS_ENC}} > {{UNIFI_DNS_PLAIN}}
+	@echo "🔓 Decrypting {{UNIFI_DNS_ENC}} -> {{UNIFI_DNS_PLAIN}} (binary)"
+	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_DNS_ENC}} > {{UNIFI_DNS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_DNS_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{UNIFI_DNS_PLAIN}}"
 
 decrypt-unifi-fixed-ips: _check-tools _check-dirs
-	@echo "🔓 Decrypting {{UNIFI_FIXED_IPS_ENC}} -> {{UNIFI_FIXED_IPS_PLAIN}} (JSON)"
-	{{SOPS}} -d --output-type json {{UNIFI_FIXED_IPS_ENC}} > {{UNIFI_FIXED_IPS_PLAIN}}
+	@echo "🔓 Decrypting {{UNIFI_FIXED_IPS_ENC}} -> {{UNIFI_FIXED_IPS_PLAIN}} (binary)"
+	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_FIXED_IPS_ENC}} > {{UNIFI_FIXED_IPS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_FIXED_IPS_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{UNIFI_FIXED_IPS_PLAIN}}"
 
 decrypt-unifi-firewall: _check-tools _check-dirs
-	@echo "🔓 Decrypting {{UNIFI_FIREWALL_ENC}} -> {{UNIFI_FIREWALL_PLAIN}} (JSON)"
-	{{SOPS}} -d --output-type json {{UNIFI_FIREWALL_ENC}} > {{UNIFI_FIREWALL_PLAIN}}
+	@echo "🔓 Decrypting {{UNIFI_FIREWALL_ENC}} -> {{UNIFI_FIREWALL_PLAIN}} (binary)"
+	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_FIREWALL_ENC}} > {{UNIFI_FIREWALL_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_FIREWALL_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{UNIFI_FIREWALL_PLAIN}}"
 
 decrypt-unifi-import-ids: _check-tools _check-dirs
-	@echo "🔓 Decrypting {{UNIFI_IMPORT_IDS_ENC}} -> {{UNIFI_IMPORT_IDS_PLAIN}} (JSON)"
-	{{SOPS}} -d --output-type json {{UNIFI_IMPORT_IDS_ENC}} > {{UNIFI_IMPORT_IDS_PLAIN}}
+	@echo "🔓 Decrypting {{UNIFI_IMPORT_IDS_ENC}} -> {{UNIFI_IMPORT_IDS_PLAIN}} (binary)"
+	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_IMPORT_IDS_ENC}} > {{UNIFI_IMPORT_IDS_PLAIN}}
 	@echo "⚠️  Do NOT commit {{UNIFI_IMPORT_IDS_PLAIN}}"
 
 decrypt: decrypt-oci decrypt-ak-prod decrypt-ak-test
