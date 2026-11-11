@@ -1,5 +1,6 @@
-# Read-only discovery only. This root intentionally declares no UniFi resources.
-# The first milestone must not change controller configuration.
+# Read-only client inventory: data sources only, no resources declared here. just discover-unifi
+# refreshes it from the controller without changing configuration; the managed resources declared
+# elsewhere in this root are only applied by apply-unifi.
 data "unifi_client_list" "all" {
   site = var.unifi_site
 }
