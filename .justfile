@@ -242,10 +242,14 @@ apply-ak-test: decrypt-ak-test
 	cd {{AK_TEST_DIR}} && tofu apply
 	just clean-ak-test
 
-discover-unifi: decrypt-unifi
+# Read-only discovery: refresh state and outputs from the controller, then print the inventory.
+# The network inventory data sources read the declared network names, so all tfvars must be
+# decrypted for a plan to resolve the unset variables.
+discover-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns decrypt-unifi-fixed-ips decrypt-unifi-firewall decrypt-unifi-import-ids
 	cd {{UNIFI_DIR}} && tofu init -upgrade -input=false && tofu apply -refresh-only -auto-approve -input=false
 	cd {{UNIFI_DIR}} && tofu output -json inventory
-	just clean-unifi
+	cd {{UNIFI_DIR}} && tofu output -json network_inventory
+	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns clean-unifi-fixed-ips clean-unifi-firewall clean-unifi-import-ids
 
 inventory-unifi-wifi: decrypt-unifi
 	bash scripts/unifi-wifi-inventory.sh {{UNIFI_PLAIN}}
