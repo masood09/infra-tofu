@@ -26,8 +26,4 @@ resource "unifi_firewall_policy" "managed" {
   logging                 = each.value.logging
   match_opposite_protocol = each.value.match_opposite_protocol
   protocol                = each.value.protocol
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
