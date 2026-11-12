@@ -11,7 +11,6 @@ OUTPUT_TYPE := "binary"
 
 OCI_DIR := "oci"
 AK_PROD_DIR := "authentik/envs/prod"
-AK_TEST_DIR := "authentik/envs/test"
 UNIFI_DIR := "unifi"
 
 OCI_PLAIN := OCI_DIR + "/sensitive.auto.tfvars"
@@ -19,8 +18,6 @@ OCI_ENC   := OCI_DIR + "/sensitive.auto.tfvars.enc"
 
 AK_PROD_PLAIN := AK_PROD_DIR + "/sensitive.auto.tfvars"
 AK_PROD_ENC   := AK_PROD_DIR + "/sensitive.auto.tfvars.enc"
-AK_TEST_PLAIN := AK_TEST_DIR + "/sensitive.auto.tfvars"
-AK_TEST_ENC   := AK_TEST_DIR + "/sensitive.auto.tfvars.enc"
 UNIFI_PLAIN   := UNIFI_DIR + "/sensitive.auto.tfvars"
 UNIFI_ENC     := UNIFI_DIR + "/sensitive.auto.tfvars.enc"
 UNIFI_NETWORKS_PLAIN := UNIFI_DIR + "/networks.auto.tfvars.json"
@@ -43,7 +40,7 @@ _check-tools:
 	@command -v {{SOPS}} >/dev/null || { echo "❌ sops not found in PATH"; exit 1; }
 
 _check-dirs:
-	@mkdir -p {{OCI_DIR}} {{AK_PROD_DIR}} {{AK_TEST_DIR}} {{UNIFI_DIR}}
+	@mkdir -p {{OCI_DIR}} {{AK_PROD_DIR}} {{UNIFI_DIR}}
 
 # -----------------------------
 # Encrypt
@@ -57,11 +54,6 @@ encrypt-ak-prod: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{AK_PROD_PLAIN}} -> {{AK_PROD_ENC}} (binary)"
 	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{AK_PROD_ENC}} {{AK_PROD_PLAIN}}
 	@echo "✅ Wrote {{AK_PROD_ENC}}"
-
-encrypt-ak-test: _check-tools _check-dirs
-	@echo "🔐 Encrypting {{AK_TEST_PLAIN}} -> {{AK_TEST_ENC}} (binary)"
-	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{AK_TEST_ENC}} {{AK_TEST_PLAIN}}
-	@echo "✅ Wrote {{AK_TEST_ENC}}"
 
 encrypt-unifi: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{UNIFI_PLAIN}} -> {{UNIFI_ENC}} (binary)"
@@ -93,7 +85,7 @@ encrypt-unifi-import-ids: _check-tools _check-dirs
 	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_IMPORT_IDS_ENC}} {{UNIFI_IMPORT_IDS_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_IMPORT_IDS_ENC}}"
 
-encrypt: encrypt-oci encrypt-ak-prod encrypt-ak-test
+encrypt: encrypt-oci encrypt-ak-prod
 	@echo "✅ Encrypted all"
 
 # -----------------------------
@@ -110,12 +102,6 @@ decrypt-ak-prod: _check-tools _check-dirs
 	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{AK_PROD_ENC}} > {{AK_PROD_PLAIN}}
 	@echo "✅ Wrote {{AK_PROD_PLAIN}}"
 	@echo "⚠️  Do NOT commit {{AK_PROD_PLAIN}}"
-
-decrypt-ak-test: _check-tools _check-dirs
-	@echo "🔓 Decrypting {{AK_TEST_ENC}} -> {{AK_TEST_PLAIN}} (binary)"
-	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{AK_TEST_ENC}} > {{AK_TEST_PLAIN}}
-	@echo "✅ Wrote {{AK_TEST_PLAIN}}"
-	@echo "⚠️  Do NOT commit {{AK_TEST_PLAIN}}"
 
 decrypt-unifi: _check-tools _check-dirs
 	@echo "🔓 Decrypting {{UNIFI_ENC}} -> {{UNIFI_PLAIN}} (binary)"
@@ -158,7 +144,7 @@ decrypt-unifi-import-ids: _check-tools _check-dirs
 	{{SOPS}} -d --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} {{UNIFI_IMPORT_IDS_ENC}} > {{UNIFI_IMPORT_IDS_PLAIN}}
 	@echo "⚠️  Do NOT commit {{UNIFI_IMPORT_IDS_PLAIN}}"
 
-decrypt: decrypt-oci decrypt-ak-prod decrypt-ak-test
+decrypt: decrypt-oci decrypt-ak-prod
 	@echo "✅ Decrypted all"
 
 # -----------------------------
@@ -172,11 +158,6 @@ clean-oci:
 clean-ak-prod:
 	@echo "🧹 Removing {{AK_PROD_PLAIN}}"
 	rm -f {{AK_PROD_PLAIN}}
-	@echo "✅ Clean"
-
-clean-ak-test:
-	@echo "🧹 Removing {{AK_TEST_PLAIN}}"
-	rm -f {{AK_TEST_PLAIN}}
 	@echo "✅ Clean"
 
 clean-unifi:
@@ -214,7 +195,7 @@ clean-unifi-import-ids:
 	rm -f {{UNIFI_IMPORT_IDS_PLAIN}}
 	@echo "✅ Clean"
 
-clean: clean-oci clean-ak-prod clean-ak-test clean-unifi
+clean: clean-oci clean-ak-prod clean-unifi
 	@echo "✅ Cleaned all"
 
 # -----------------------------
@@ -235,14 +216,6 @@ plan-ak-prod: decrypt-ak-prod
 apply-ak-prod: decrypt-ak-prod
 	cd {{AK_PROD_DIR}} && tofu apply
 	just clean-ak-prod
-
-plan-ak-test: decrypt-ak-test
-	cd {{AK_TEST_DIR}} && tofu plan
-	just clean-ak-test
-
-apply-ak-test: decrypt-ak-test
-	cd {{AK_TEST_DIR}} && tofu apply
-	just clean-ak-test
 
 # Read-only discovery: refresh state and outputs from the controller, then print the inventory.
 # The network inventory data sources read the declared network names, so all tfvars must be
@@ -293,12 +266,7 @@ update-ak-prod: _check-tools _check-dirs
 	{{SOPS}} -r --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} -i {{AK_PROD_ENC}}
 	@echo "✅ Updated {{AK_PROD_ENC}}"
 
-update-ak-test: _check-tools _check-dirs
-	@echo "♻️  Updating (re-encrypting) {{AK_TEST_ENC}}"
-	{{SOPS}} -r --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} -i {{AK_TEST_ENC}}
-	@echo "✅ Updated {{AK_TEST_ENC}}"
-
-update: update-oci update-ak-prod update-ak-test
+update: update-oci update-ak-prod
 	@echo "✅ Updated all encrypted files"
 
 # Rotate data key in-place (and re-encrypt)
@@ -312,10 +280,5 @@ rotate-ak-prod: _check-tools _check-dirs
 	{{SOPS}} --rotate --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} -i {{AK_PROD_ENC}}
 	@echo "✅ Rotated {{AK_PROD_ENC}}"
 
-rotate-ak-test: _check-tools _check-dirs
-	@echo "🔁 Rotating data key for {{AK_TEST_ENC}}"
-	{{SOPS}} --rotate --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} -i {{AK_TEST_ENC}}
-	@echo "✅ Rotated {{AK_TEST_ENC}}"
-
-rotate: rotate-oci rotate-ak-prod rotate-ak-test
+rotate: rotate-oci rotate-ak-prod
 	@echo "✅ Rotated all encrypted files"
