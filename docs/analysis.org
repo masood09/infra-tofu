@@ -1,0 +1,579 @@
+#+TITLE: Infrastructure Codebase Analysis
+#+AUTHOR: Principal Engineer Review
+#+DATE: 2026-03-16
+#+OPTIONS: toc:3 num:t
+
+* Executive Summary
+
+This document provides a comprehensive analysis of the =infra-tofu= infrastructure-as-code repository. The codebase manages Oracle Cloud Infrastructure (OCI) resources and Authentik identity management across production and test environments using OpenTofu/Terraform with SOPS-based secrets encryption.
+
+** Overall Assessment
+
+| Category           | Rating | Status                                      |
+|--------------------+--------+---------------------------------------------|
+| Security           | D      | Critical vulnerabilities in state/network   |
+| Code Quality       | C+     | Functional but significant duplication      |
+| State Management   | F      | Local state files, no locking               |
+| CI/CD              | F      | No automation exists                        |
+| Documentation      | C      | Basic CLAUDE.md, missing runbooks           |
+| Module Design      | B+     | Well-structured Authentik module            |
+| Secrets Management | B      | SOPS implementation good, single key risk   |
+
+** Critical Issues Requiring Immediate Action
+1. State files contain sensitive data and are stored locally
+2. Network security rules overly permissive (0.0.0.0/0 on multiple ports)
+3. SSH public key in plaintext =terraform.tfvars=
+4. No CI/CD pipeline for validation or approval gates
+5. No disaster recovery procedures documented
+
+* Architecture Overview
+
+** Directory Structure
+#+begin_src
+infra-tofu/
+├── oci/                          # Oracle Cloud Infrastructure
+│   ├── providers.tf              # OCI, CloudFlare, SOPS providers
+│   ├── variable.tf               # Credentials and config variables
+│   ├── network.tf                # VCN, subnets, security lists
+│   ├── instance.tf               # 4 Ubuntu VM instances
+│   ├── dns.tf                    # 25 CloudFlare DNS records
+│   ├── email.tf                  # OCI email delivery service
+│   └── storage.tf                # Object storage buckets
+├── authentik/
+│   └── envs/
+│       ├── prod/                 # Production Authentik
+│       │   ├── main.tf
+│       │   ├── providers.tf      # 58 lines (duplicated in test)
+│       │   ├── variables.tf
+│       │   └── secrets/          # SOPS-encrypted JSON configs
+│       └── test/                 # Test Authentik (mirrors prod)
+└── modules/
+    └── authentik/                # Shared module
+        ├── providers.tf
+        ├── default.tf            # Default flows and scopes
+        ├── users.tf              # User and group management
+        ├── apps.tf               # OAuth2 apps and providers
+        └── variables.tf
+#+end_src
+
+** Component Inventory
+
+| Component     | Count | Technology              | Environment |
+|---------------+-------+-------------------------+-------------|
+| VM Instances  |     4 | Ubuntu 24.04, A1.Flex   | OCI         |
+| DNS Records   |    25 | CloudFlare              | OCI         |
+| Email Senders |     4 | OCI Email Delivery      | OCI         |
+| OAuth2 Apps   |    5+ | Authentik               | Prod/Test   |
+| User Groups   |     6 | Authentik               | Prod/Test   |
+| Object Bucket |     1 | OCI Object Storage      | OCI         |
+
+* Detailed Findings
+
+** Category 1: Security [CRITICAL]
+
+*** Finding 1.1: Overly Permissive Network Security Rules
+- File: =oci/network.tf:22-124=
+- Severity: *CRITICAL*
+
+The security list allows broad access patterns:
+- Line 22-27: Egress allows ALL protocols to 0.0.0.0/0
+- Line 31: Internal VCN allows ALL traffic (172.16.0.0/16)
+- Lines 49-78: HTTP/HTTPS/custom ports open to entire internet
+- Lines 80-89: Port 22222 open with undocumented purpose
+
+*Impact*: Attack surface unnecessarily large, no geofencing or rate limiting.
+
+*** Finding 1.2: SSH Key in Plaintext Version Control
+- File: =oci/terraform.tfvars:2=
+- Severity: *CRITICAL*
+
+SSH public key stored in unencrypted tfvars file, which may have been committed to git history.
+
+*** Finding 1.3: State Files Contain Secrets
+- Files: =terraform.tfstate=, =oci/terraform.tfstate=, =authentik/envs/*/terraform.tfstate=
+- Severity: *CRITICAL*
+
+State files contain sensitive data (API keys, OAuth secrets, resource IDs) and are stored locally. Git history may contain historical versions with secrets.
+
+*** Finding 1.4: User-Based Provider Authentication
+- File: =oci/providers.tf:18-24=
+- Severity: *HIGH*
+
+Using user credentials instead of instance principal or service principal. Private key path exposed in configuration.
+
+** Category 2: State Management [CRITICAL]
+
+*** Finding 2.1: Local State Files
+- Severity: *CRITICAL*
+
+No remote backend configured. State files are:
+- Not versioned (no point-in-time recovery)
+- Not encrypted at rest
+- Not locked (concurrent apply risk)
+- Stored on developer machines (data loss risk)
+
+*** Finding 2.2: No State Locking
+- Severity: *HIGH*
+
+Multiple engineers could run =tofu apply= simultaneously, causing state corruption or race conditions.
+
+** Category 3: Code Quality [HIGH]
+
+*** Finding 3.1: Instance Definitions Duplicated 4x
+- File: =oci/instance.tf:12-126=
+- Severity: *HIGH*
+
+Four nearly identical instance resource blocks (127 lines total). Should use =for_each= pattern.
+
+#+begin_src hcl
+# Current (anti-pattern): 4 separate resource blocks
+resource "oci_core_instance" "accesscontrolsystem_instance" { ... }
+resource "oci_core_instance" "commrelay_instance" { ... }
+resource "oci_core_instance" "meshcontrol_instance" { ... }
+resource "oci_core_instance" "watchfulsystem_instance" { ... }
+
+# Recommended: Single resource with for_each
+locals {
+  instances = {
+    accesscontrolsystem = { ocpus = 1, memory = 6 }
+    commrelay           = { ocpus = 1, memory = 6 }
+    meshcontrol         = { ocpus = 1, memory = 6 }
+    watchfulsystem      = { ocpus = 1, memory = 6 }
+  }
+}
+
+resource "oci_core_instance" "main" {
+  for_each     = local.instances
+  display_name = each.key
+  # ... shared configuration
+}
+#+end_src
+
+*** Finding 3.2: DNS Records Duplicated 25x
+- File: =oci/dns.tf:1-170=
+- Severity: *HIGH*
+
+25 DNS record definitions with repetitive patterns. Should use =for_each= with locals map.
+
+*** Finding 3.3: Prod/Test Provider Config Duplicated
+- Files: =authentik/envs/prod/providers.tf=, =authentik/envs/test/providers.tf=
+- Severity: *MEDIUM*
+
+58 lines of identical code in both environments.
+
+*** Finding 3.4: Weak Variable Typing
+- File: =modules/authentik/variables.tf:10-12=
+- Severity: *HIGH*
+
+=apps_obj= uses =map(any)= type, providing no compile-time validation.
+
+** Category 4: CI/CD & Automation [HIGH]
+
+*** Finding 4.1: No CI/CD Pipeline
+- Severity: *HIGH*
+
+No GitHub Actions, GitLab CI, or other automation:
+- No automated syntax validation
+- No security scanning (tfsec, checkov)
+- No plan output on PRs
+- No approval gates for production
+
+*** Finding 4.2: No Pre-commit Hooks
+- Severity: *MEDIUM*
+
+No =.pre-commit-config.yaml= for:
+- Format checking (=tofu fmt=)
+- Validation (=tofu validate=)
+- Secret detection (gitleaks)
+
+*** Finding 4.3: Missing Justfile Targets
+- File: =.justfile=
+- Severity: *LOW*
+
+Missing targets for:
+- =validate= / =lint=
+- =format-check=
+- =state-list= / =state-show=
+
+** Category 5: Operational Readiness [MEDIUM]
+
+*** Finding 5.1: No Resource Tagging
+- Severity: *MEDIUM*
+
+No tags on any OCI resources. Impacts:
+- Cost allocation
+- Resource tracking/auditing
+- Automation based on tags
+
+*** Finding 5.2: No Module Outputs
+- File: =modules/authentik/= (missing outputs.tf)
+- Severity: *LOW*
+
+Cannot reference module-created resources from parent module.
+
+*** Finding 5.3: Hardcoded Values
+- Severity: *MEDIUM*
+
+| Value               | Location              | Line(s)       |
+|---------------------+-----------------------+---------------|
+| Instance shape      | instance.tf           | 9,16,45,74    |
+| OCPU/Memory         | instance.tf           | 19-20,48-49   |
+| VCN CIDR            | network.tf            | 11            |
+| DNS TTL (always 1)  | dns.tf                | 6,15,24...    |
+| Token validity      | apps.tf               | 48-51         |
+| Superuser group     | users.tf              | 42            |
+
+*** Finding 5.4: No Disaster Recovery
+- Severity: *HIGH*
+
+- Single age encryption key (no backup documented)
+- No state backup strategy
+- No RTO/RPO defined
+- No recovery procedures documented
+
+*** Finding 5.5: No Validation of Group References
+- File: =modules/authentik/apps.tf:4-13=
+- Severity: *MEDIUM*
+
+Access rules reference groups that may not exist. Typos silently create wrong bindings.
+
+* Work Breakdown Structure
+
+** Epic 1: State Management & Security Remediation
+:PROPERTIES:
+:Priority: CRITICAL
+:Estimate: 2 weeks
+:END:
+
+*** Story 1.1: Implement Remote State Backend
+*Description*: Migrate from local state files to S3-compatible remote backend with encryption and locking.
+
+**** Task 1.1.1: Create S3 bucket for state storage
+- Create OCI Object Storage bucket with versioning enabled
+- Enable server-side encryption
+- Configure bucket policy for least-privilege access
+- Commit: =feat(state): add S3 bucket for terraform state storage=
+
+**** Task 1.1.2: Create DynamoDB table for state locking
+- Create table with =LockID= primary key
+- Configure TTL for stale locks
+- Commit: =feat(state): add DynamoDB table for state locking=
+
+**** Task 1.1.3: Add backend configuration for OCI
+- Create =oci/backend.tf= with S3 backend config
+- Configure encryption and locking
+- Commit: =feat(oci): add remote state backend configuration=
+
+**** Task 1.1.4: Add backend configuration for Authentik prod
+- Create =authentik/envs/prod/backend.tf=
+- Use separate state key from OCI
+- Commit: =feat(authentik): add remote state backend for prod=
+
+**** Task 1.1.5: Add backend configuration for Authentik test
+- Create =authentik/envs/test/backend.tf=
+- Use separate state key
+- Commit: =feat(authentik): add remote state backend for test=
+
+**** Task 1.1.6: Migrate existing state to remote backend
+- Run =tofu init -migrate-state= for each environment
+- Verify state integrity post-migration
+- Commit: =chore(state): migrate local state to remote backend=
+
+**** Task 1.1.7: Remove state files from git history
+- Use bfg-repo-cleaner to purge historical state
+- Force push cleaned history (coordinate with team)
+- Commit: =security(git): remove sensitive state files from history=
+
+*** Story 1.2: Remediate Network Security
+*Description*: Tighten network security rules to least-privilege model.
+
+**** Task 1.2.1: Document purpose of all open ports
+- Add comments explaining each security rule
+- Document port 22222 purpose or remove
+- Commit: =docs(network): document security rule purposes=
+
+**** Task 1.2.2: Restrict egress rules
+- Change from protocol "all" to specific protocols needed
+- Commit: =security(network): restrict egress to required protocols=
+
+**** Task 1.2.3: Remove or restrict undocumented ports
+- Remove port 22222 if unused, or restrict source CIDR
+- Commit: =security(network): remove undocumented port 22222 rule=
+
+**** Task 1.2.4: Add security rule variables
+- Extract hardcoded ports to variables
+- Add descriptions for each port variable
+- Commit: =refactor(network): extract security ports to variables=
+
+*** Story 1.3: Secure Credentials Management
+*Description*: Move all sensitive values to encrypted storage.
+
+**** Task 1.3.1: Encrypt SSH key in tfvars
+- Move SSH key from terraform.tfvars to sensitive.auto.tfvars
+- Ensure SOPS encryption covers it
+- Commit: =security(oci): encrypt SSH public key with SOPS=
+
+**** Task 1.3.2: Migrate to instance principal authentication
+- Configure OCI instance principal for provider auth
+- Remove user credentials from provider config
+- Commit: =security(oci): migrate to instance principal auth=
+
+**** Task 1.3.3: Document age key backup procedure
+- Create runbook for key backup and recovery
+- Store backup in secure location
+- Commit: =docs(security): add age key backup procedure=
+
+** Epic 2: Code Quality & DRY Refactoring
+:PROPERTIES:
+:Priority: HIGH
+:Estimate: 1.5 weeks
+:END:
+
+*** Story 2.1: Refactor Instance Definitions
+*Description*: Eliminate duplication in instance.tf using for_each pattern.
+
+**** Task 2.1.1: Create instances local map
+- Define local.instances with all instance configurations
+- Commit: =refactor(oci): add instances configuration map=
+
+**** Task 2.1.2: Convert instances to for_each
+- Replace 4 resource blocks with single for_each resource
+- Maintain identical functionality
+- Commit: =refactor(oci): convert instances to for_each pattern=
+
+**** Task 2.1.3: Extract instance shape to variable
+- Add variable for instance shape with default
+- Commit: =refactor(oci): extract instance shape to variable=
+
+**** Task 2.1.4: Use dynamic image lookup
+- Enable commented image lookup code
+- Remove hardcoded image OCID
+- Commit: =refactor(oci): enable dynamic image lookup=
+
+*** Story 2.2: Refactor DNS Records
+*Description*: Eliminate duplication in dns.tf using for_each pattern.
+
+**** Task 2.2.1: Create DNS records local map
+- Define local.dns_records with all record configurations
+- Include type, name, value, proxied status
+- Commit: =refactor(dns): add DNS records configuration map=
+
+**** Task 2.2.2: Convert A records to for_each
+- Replace individual A record blocks with for_each
+- Commit: =refactor(dns): convert A records to for_each=
+
+**** Task 2.2.3: Convert CNAME records to for_each
+- Replace individual CNAME blocks with for_each
+- Commit: =refactor(dns): convert CNAME records to for_each=
+
+**** Task 2.2.4: Extract TTL to variable
+- Add dns_ttl variable with sensible default (not 1)
+- Commit: =refactor(dns): extract TTL to variable=
+
+*** Story 2.3: Eliminate Prod/Test Duplication
+*Description*: Extract shared Authentik environment configuration.
+
+**** Task 2.3.1: Create shared provider configuration
+- Extract common provider config to shared file
+- Commit: =refactor(authentik): extract shared provider configuration=
+
+**** Task 2.3.2: Remove token validity duplication
+- Keep defaults only in module, remove from environment
+- Commit: =refactor(authentik): consolidate token validity defaults=
+
+*** Story 2.4: Improve Variable Typing
+*Description*: Add strict types and validation to module variables.
+
+**** Task 2.4.1: Add explicit type for apps_obj
+- Replace map(any) with map(object({...}))
+- Commit: =refactor(authentik): add explicit type for apps_obj=
+
+**** Task 2.4.2: Add email validation
+- Add regex validation for user email field
+- Commit: =refactor(authentik): add email format validation=
+
+**** Task 2.4.3: Add group reference validation
+- Validate app access groups exist in user groups
+- Commit: =refactor(authentik): add group reference validation=
+
+** Epic 3: CI/CD Pipeline Implementation
+:PROPERTIES:
+:Priority: HIGH
+:Estimate: 1 week
+:END:
+
+*** Story 3.1: Implement Pre-commit Hooks
+*Description*: Add pre-commit configuration for local validation.
+
+**** Task 3.1.1: Create pre-commit configuration
+- Add .pre-commit-config.yaml with terraform hooks
+- Include fmt, validate, tflint, tfsec
+- Commit: =feat(ci): add pre-commit configuration=
+
+**** Task 3.1.2: Add secret detection
+- Configure gitleaks in pre-commit
+- Commit: =feat(ci): add secret detection to pre-commit=
+
+**** Task 3.1.3: Add commit message linting
+- Configure commitizen for conventional commits
+- Commit: =feat(ci): add conventional commit enforcement=
+
+*** Story 3.2: Implement GitHub Actions Pipeline
+*Description*: Add automated validation and planning on PRs.
+
+**** Task 3.2.1: Create validation workflow
+- Add workflow for tofu validate on all environments
+- Run on push and PR
+- Commit: =feat(ci): add terraform validation workflow=
+
+**** Task 3.2.2: Add security scanning
+- Add tfsec and checkov scanning
+- Fail PR on high severity findings
+- Commit: =feat(ci): add security scanning workflow=
+
+**** Task 3.2.3: Add plan output on PRs
+- Generate plan and comment on PR
+- Commit: =feat(ci): add plan output to pull requests=
+
+**** Task 3.2.4: Add branch protection rules
+- Document required branch protection settings
+- Require passing checks before merge
+- Commit: =docs(ci): add branch protection documentation=
+
+*** Story 3.3: Add Justfile Enhancements
+*Description*: Add missing automation targets.
+
+**** Task 3.3.1: Add validate targets
+- Add just validate-oci, validate-ak-prod, validate-ak-test
+- Commit: =feat(just): add validation targets=
+
+**** Task 3.3.2: Add format check targets
+- Add just fmt-check for format verification
+- Commit: =feat(just): add format check targets=
+
+**** Task 3.3.3: Add state inspection targets
+- Add just state-list and state-show helpers
+- Commit: =feat(just): add state inspection targets=
+
+** Epic 4: Observability & Governance
+:PROPERTIES:
+:Priority: MEDIUM
+:Estimate: 1 week
+:END:
+
+*** Story 4.1: Implement Resource Tagging
+*Description*: Add comprehensive tagging to all resources.
+
+**** Task 4.1.1: Define tagging standard
+- Create locals with standard tags (environment, project, owner, cost-center)
+- Commit: =feat(oci): define resource tagging standard=
+
+**** Task 4.1.2: Add tags to instances
+- Apply tags to all instance resources
+- Commit: =feat(oci): add tags to instance resources=
+
+**** Task 4.1.3: Add tags to network resources
+- Apply tags to VCN, subnets, security lists
+- Commit: =feat(oci): add tags to network resources=
+
+**** Task 4.1.4: Add tags to storage resources
+- Apply tags to object storage bucket
+- Commit: =feat(oci): add tags to storage resources=
+
+*** Story 4.2: Add Module Outputs
+*Description*: Add outputs.tf to Authentik module.
+
+**** Task 4.2.1: Add user outputs
+- Export user IDs and usernames
+- Commit: =feat(authentik): add user outputs to module=
+
+**** Task 4.2.2: Add group outputs
+- Export group IDs and names
+- Commit: =feat(authentik): add group outputs to module=
+
+**** Task 4.2.3: Add application outputs
+- Export app UUIDs and OAuth client IDs
+- Commit: =feat(authentik): add application outputs to module=
+
+*** Story 4.3: Extract Hardcoded Values
+*Description*: Make remaining hardcoded values configurable.
+
+**** Task 4.3.1: Extract VCN CIDR to variable
+- Add vcn_cidr variable with default
+- Commit: =refactor(network): extract VCN CIDR to variable=
+
+**** Task 4.3.2: Extract subnet CIDR to variable
+- Add subnet_cidrs variable
+- Commit: =refactor(network): extract subnet CIDRs to variable=
+
+**** Task 4.3.3: Extract OAuth token defaults to variables
+- Add variables for token validity with documented defaults
+- Commit: =refactor(authentik): extract token validity to variables=
+
+**** Task 4.3.4: Extract superuser group to variable
+- Add privileged_groups variable
+- Commit: =refactor(authentik): extract superuser group to variable=
+
+** Epic 5: Documentation & Runbooks
+:PROPERTIES:
+:Priority: MEDIUM
+:Estimate: 0.5 weeks
+:END:
+
+*** Story 5.1: Create Operational Runbooks
+*Description*: Document common operations and procedures.
+
+**** Task 5.1.1: Create disaster recovery runbook
+- Document state recovery procedures
+- Document key rotation procedures
+- Commit: =docs: add disaster recovery runbook=
+
+**** Task 5.1.2: Create VM operations runbook
+- Document how to add/remove VMs
+- Document image update procedures
+- Commit: =docs: add VM operations runbook=
+
+**** Task 5.1.3: Create Authentik operations runbook
+- Document user/group/app management
+- Document environment promotion (test to prod)
+- Commit: =docs: add Authentik operations runbook=
+
+*** Story 5.2: Update CLAUDE.md
+*Description*: Enhance existing documentation.
+
+**** Task 5.2.1: Add architecture diagram
+- Add ASCII or mermaid network topology
+- Commit: =docs: add architecture diagram to CLAUDE.md=
+
+**** Task 5.2.2: Add troubleshooting section
+- Document common errors and fixes
+- Commit: =docs: add troubleshooting section to CLAUDE.md=
+
+* Priority Matrix
+
+| Priority | Epic | Stories | Tasks | Effort    |
+|----------+------+---------+-------+-----------|
+| P0       |    1 |       3 |    14 | 2 weeks   |
+| P1       |    2 |       4 |    13 | 1.5 weeks |
+| P1       |    3 |       3 |    10 | 1 week    |
+| P2       |    4 |       3 |    11 | 1 week    |
+| P2       |    5 |       2 |     5 | 0.5 weeks |
+|----------+------+---------+-------+-----------|
+| Total    |    5 |      15 |    53 | 6 weeks   |
+
+* Appendix: File Reference
+
+| File                             | Issues Found  | Severity |
+|----------------------------------+---------------+----------|
+| oci/terraform.tfstate            | Secrets       | CRITICAL |
+| oci/terraform.tfvars             | SSH key       | CRITICAL |
+| oci/network.tf                   | Permissive    | CRITICAL |
+| oci/instance.tf                  | Duplication   | HIGH     |
+| oci/dns.tf                       | Duplication   | HIGH     |
+| oci/providers.tf                 | User creds    | HIGH     |
+| modules/authentik/variables.tf   | Weak typing   | HIGH     |
+| modules/authentik/apps.tf        | No validation | MEDIUM   |
+| modules/authentik/users.tf       | Hardcoded     | MEDIUM   |
+| authentik/envs/prod/providers.tf | Duplicated    | MEDIUM   |
+| authentik/envs/test/providers.tf | Duplicated    | MEDIUM   |
+| .justfile                        | Missing cmds  | LOW      |
