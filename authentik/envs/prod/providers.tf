@@ -61,6 +61,12 @@ locals {
         external_host   = app.provider.external_host
         internal_host   = app.provider.internal_host
         skip_path_regex = try(app.provider.skip_path_regex, null)
+        # Proxy Provider sessions are hard-set to this (no sliding refresh — see
+        # proxyv2/application/session.go), so the Access Token validity *is* the
+        # proxy session lifetime. Authentik's default minutes=10 is what forced
+        # re-login on every Forward Auth app; capped near the Authentik login
+        # session (24h) so re-auths stay silent redirects, not password prompts.
+        access_token_validity = try(app.provider.access_token_validity, "hours=12")
       }
     }
   }
