@@ -243,6 +243,15 @@ capture-unifi-firewall: decrypt-unifi
 	just encrypt-unifi-firewall
 	just clean-unifi clean-unifi-firewall
 
+# Regenerate import IDs from live controller IDs, keyed by the map keys used in the
+# config tfvars (matched on object name) so the import blocks in imports.tf can use
+# them directly. Unmatched objects are reported on stderr. Run with everything
+# decrypted to inspect warnings without overwriting: bash scripts/unifi-gen-import-ids.sh unifi/sensitive.auto.tfvars
+regen-unifi-import-ids: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns decrypt-unifi-firewall decrypt-unifi-import-ids
+	bash scripts/unifi-gen-import-ids.sh {{UNIFI_PLAIN}} > {{UNIFI_IMPORT_IDS_PLAIN}}
+	just encrypt-unifi-import-ids
+	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns clean-unifi-firewall clean-unifi-import-ids
+
 plan-unifi: decrypt-unifi decrypt-unifi-networks decrypt-unifi-wlans decrypt-unifi-dns decrypt-unifi-fixed-ips decrypt-unifi-firewall decrypt-unifi-import-ids
 	cd {{UNIFI_DIR}} && tofu plan -input=false
 	just clean-unifi clean-unifi-networks clean-unifi-wlans clean-unifi-dns clean-unifi-fixed-ips clean-unifi-firewall clean-unifi-import-ids
