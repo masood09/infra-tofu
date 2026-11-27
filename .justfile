@@ -60,6 +60,11 @@ encrypt-unifi: _check-tools _check-dirs
 	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_ENC}} {{UNIFI_PLAIN}}
 	@echo "✅ Wrote {{UNIFI_ENC}}"
 
+encrypt-unifi-networks: _check-tools _check-dirs
+	@echo "🔐 Encrypting {{UNIFI_NETWORKS_PLAIN}} -> {{UNIFI_NETWORKS_ENC}} (binary)"
+	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_NETWORKS_ENC}} {{UNIFI_NETWORKS_PLAIN}}
+	@echo "✅ Wrote {{UNIFI_NETWORKS_ENC}}"
+
 encrypt-unifi-wlans: _check-tools _check-dirs
 	@echo "🔐 Encrypting {{UNIFI_WLANS_PLAIN}} -> {{UNIFI_WLANS_ENC}} (binary)"
 	{{SOPS}} -e --input-type {{INPUT_TYPE}} --output-type {{OUTPUT_TYPE}} --output {{UNIFI_WLANS_ENC}} {{UNIFI_WLANS_PLAIN}}
