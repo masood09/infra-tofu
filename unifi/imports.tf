@@ -1,5 +1,8 @@
 import {
-  for_each = var.unifi_networks
+  for_each = {
+    for key, network in var.unifi_networks : key => network
+    if try(var.unifi_import_ids.networks[key], null) != null
+  }
   to       = unifi_network.managed[each.key]
   id       = var.unifi_import_ids.networks[each.key]
 }

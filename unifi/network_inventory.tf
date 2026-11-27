@@ -1,6 +1,9 @@
 locals {
+  # Only networks that already have a controller ID (imported or created) are readable
+  # from the controller; newly declared networks appear after the next regen-import-ids.
   unifi_network_names = toset([
-    for network in values(var.unifi_networks) : network.name
+    for key, network in var.unifi_networks : network.name
+    if try(var.unifi_import_ids.networks[key], null) != null
   ])
 }
 
