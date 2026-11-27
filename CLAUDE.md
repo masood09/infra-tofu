@@ -50,6 +50,7 @@ infra-tofu/
 ## Conventions
 
 - Conventional commit messages: `feat(scope):`, `fix(scope):`, `chore(scope):`
+- Never leak network identifiers (IP addresses, MAC addresses, hostnames/DNS names) into commit messages, code comments, or anything sent outside the repo. Keep them only in the (encrypted) tfvars files and state.
 - Provider versions locked via `.terraform.lock.hcl` files
 - Renovate bot handles automated dependency updates
 - Encrypted secrets in `secrets/` directories and `sensitive.auto.tfvars.enc` files
